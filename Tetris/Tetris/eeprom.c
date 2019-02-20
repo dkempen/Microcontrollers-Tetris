@@ -10,20 +10,22 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <avr/eeprom.h>
-#include <stdint.h>
 #include "eeprom.h"
 
 //defines
+#define HIGHSCORE_ADRESS 0011;
 
 void writeHighScore(uint8_t score) {
 	cli();
-	eeprom_update_byte((uint8_t*)17,score);
+	//hex 0011 == 17 decimal
+	eeprom_update_byte((uint8_t*) 0011, score);
 	sei();
 }
 
 int readHighScore() {
 	cli();
-	uint8_t score = eeprom_read_byte((uint8_t*)17);
+	//hex 0011 == 17 decimal
+	int score = eeprom_read_byte((uint8_t*) 0011);
 	sei();
 	return score;
 }

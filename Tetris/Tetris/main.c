@@ -5,16 +5,18 @@
  * Author : Daan, Ian, Max, Jordy
  */ 
 
+#define F_CPU 8000000L
+
 #include <avr/io.h>
-#include <stdint.h>
+#include "lcd.h"
+#include "eeprom.h"
 
 
 int main(void)
-{
-	uint8_t score = 3;
-	writeHighScore(score);
+{	
+	lcd_init();
+	lcd_set_cursor(0);
 	
-	uint8_t score1 = readHighScore();
     while (1) 
     {
     }
