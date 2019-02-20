@@ -6,10 +6,15 @@
  */ 
 
 #include <avr/io.h>
+#include <stdint.h>
+
 
 int main(void)
 {
-    /* Replace with your application code */
+	uint8_t score = 3;
+	writeHighScore(score);
+	
+	uint8_t score1 = readHighScore();
     while (1) 
     {
     }
