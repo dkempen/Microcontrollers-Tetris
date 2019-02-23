@@ -6,11 +6,21 @@
  */ 
 
 #define F_CPU 8000000L
+#define I2C_ADRS 0xE0
 
 #include <avr/io.h>
 #include <util/delay.h>
 
-void test()
+void twi_init(void);
+void twi_start(void);
+void twi_stop(void);
+void twi_tx(unsigned char);
+
+void wait(int);
+void led_row(int, int);
+void shift_data(int *);
+
+void matrix_init()
 {
 	twi_init();		// Init TWI interface
 
@@ -34,6 +44,22 @@ void test()
 	twi_tx(0xE0);	// Display I2C address + R/W bit
 	twi_tx(0x81);	// Display OFF - Blink On
 	twi_stop();
+}
+
+void matrix_clear()
+{
+	for (int i = 0; i < 8; i ++)
+		led_row(i, 0);
+}
+
+void matrix_write(unsigned char *field)
+{
+	
+}
+
+void matrix_test()
+{
+	matrix_init();
 	
 	int i = 0;
 	int j = 0;
@@ -52,10 +78,6 @@ void test()
 				wait(50);
 			}
 		}
-		
-		// Clear all leds
-		for (i = 0; i < 8 * 2; i += 2)
-			led_row(i, 0);
 	}
 }
 
@@ -92,15 +114,20 @@ void wait( int ms )
 // row (from 0 - 8) data (from 0 - 8 bit of a byte)
 void led_row(int address, int data)
 {
-	// Change data because the bits are offset by 1 bit
-	if (data & 1)
-		data = (data - 1) / 2 + (1 << 7);
-	else
-		data /= 2;
-		
+	shift_data(&data);
+	
 	twi_start();
 	twi_tx(0xE0);		// Display I2C addres + R/W bit
 	twi_tx(address * 2);// Address
 	twi_tx(data);		// data
 	twi_stop();
+}
+
+// Change data because the bits are offset by 1 bit
+void shift_data(int *data)
+{
+	if (*data & 1)
+		*data = (*data - 1) / 2 + (1 << 7);
+	else
+		*data /= 2;
 }

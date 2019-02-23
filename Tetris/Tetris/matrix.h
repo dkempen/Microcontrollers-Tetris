@@ -9,6 +9,9 @@
 #ifndef MATRIX_H_
 #define MATRIX_H_
 
-void test(void);
+void matrix_init(void);
+void matrix_test(void);
+void matrix_clear(void);
+void matrix_write(unsigned char *);
 
 #endif /* MATRIX_H_ */

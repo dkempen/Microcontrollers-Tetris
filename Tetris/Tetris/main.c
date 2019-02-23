@@ -13,7 +13,7 @@
 
 int main(void)
 {
-	test();
+	matrix_test();
 	
     /* Replace with your application code */
     while (1) 
