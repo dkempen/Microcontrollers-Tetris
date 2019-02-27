@@ -144,12 +144,6 @@
     <Compile Include="eeprom.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="highscore.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="highscore.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="lcd.c">
       <SubType>compile</SubType>
     </Compile>

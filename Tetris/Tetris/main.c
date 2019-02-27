@@ -16,7 +16,9 @@ int main(void)
 {	
 	lcd_init();
 	lcd_set_cursor(0);
+	writeHighScore(12);
 	
+	int score = readHighScore();
     while (1) 
     {
     }

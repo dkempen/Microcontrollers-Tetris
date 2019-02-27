@@ -15,14 +15,14 @@
 //defines
 #define HIGHSCORE_ADRESS 0011;
 
-void writeHighScore(uint8_t score) {
+void eeprom_writeHighScore(int score) {
 	cli();
 	//hex 0011 == 17 decimal
 	eeprom_update_byte((uint8_t*) 0011, score);
 	sei();
 }
 
-int readHighScore() {
+int eeprom_readHighScore() {
 	cli();
 	//hex 0011 == 17 decimal
 	int score = eeprom_read_byte((uint8_t*) 0011);

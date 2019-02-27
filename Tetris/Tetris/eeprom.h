@@ -6,5 +6,5 @@
  *  Author: User
  */ 
 
-void writeHighScore(uint8_t score);
+void writeHighScore(int score);
 int readHighScore();
