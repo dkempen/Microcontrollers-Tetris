@@ -6,9 +6,12 @@
  */ 
 
 #include <avr/io.h>
+#include "easybuzz.h"
 
 int main(void)
 {
+	easybuzz_test();
+	
     /* Replace with your application code */
     while (1) 
     {
