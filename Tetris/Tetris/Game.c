@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <avr/io.h>
 
 #include "Game.h"
 #include "GameOver.h"
@@ -34,10 +35,11 @@ void InitGame(void)
 
 
 void RunGame(void)
-{
+{	
 	SpawnNewBlock();
 
 	int startTime = time(NULL);
+	TCCR1B |= (1 << CS10);
 
 	while (GetState() == STATE_GAME)
 	{
@@ -47,7 +49,12 @@ void RunGame(void)
 		DrawField(GetField(), GetPlayer());
 
 		int currentTime = time(NULL);
-		//Sleep(250); TODO: Implement a deltatime for 4 rotations per second
+		
+		//Update 4 times per second
+		if(TCNT1 < 25000)
+		continue;
+		
+		TCNT1 = 0;
 
 		CheckForInput();
 		UpdatePlayer();
