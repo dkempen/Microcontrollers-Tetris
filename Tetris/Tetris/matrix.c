@@ -6,7 +6,10 @@
  */ 
 
 #define F_CPU 8000000L
-#define I2C_ADRS 0xE0
+
+// I2C address of display
+#define D0_I2C_ADDR	((0x70 + 0) << 1)
+#define D1_I2C_ADDR	((0x70 + 1) << 1)
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -26,22 +29,22 @@ void matrix_init()
 
 	// Init HT16K22. Page 32 datasheet
 	twi_start();
-	twi_tx(0xE0);	// Display I2C addres + R/W bit
+	twi_tx(D0_I2C_ADDR);	// Display I2C addres + R/W bit
 	twi_tx(0x21);	// Internal osc on (page 10 HT16K33)
 	twi_stop();
 
 	twi_start();
-	twi_tx(0xE0);	// Display I2C address + R/W bit
+	twi_tx(D0_I2C_ADDR);	// Display I2C address + R/W bit
 	twi_tx(0xA0);	// HT16K33 pins all output
 	twi_stop();
 
 	twi_start();
-	twi_tx(0xE0);	// Display I2C address + R/W bit
+	twi_tx(D0_I2C_ADDR);	// Display I2C address + R/W bit
 	twi_tx(0xE3);	// Display Dimming 4/16 duty cycle
 	twi_stop();
 
 	twi_start();
-	twi_tx(0xE0);	// Display I2C address + R/W bit
+	twi_tx(D0_I2C_ADDR);	// Display I2C address + R/W bit
 	twi_tx(0x81);	// Display OFF - Blink On
 	twi_stop();
 }
@@ -60,6 +63,7 @@ void matrix_write(unsigned char *field)
 void matrix_test()
 {
 	matrix_init();
+	matrix_clear(); 
 	
 	int i = 0;
 	int j = 0;
@@ -78,6 +82,7 @@ void matrix_test()
 				wait(50);
 			}
 		}
+		matrix_clear();
 	}
 }
 
@@ -117,7 +122,7 @@ void led_row(int address, int data)
 	shift_data(&data);
 	
 	twi_start();
-	twi_tx(0xE0);		// Display I2C addres + R/W bit
+	twi_tx(D0_I2C_ADDR);		// Display I2C addres + R/W bit
 	twi_tx(address * 2);// Address
 	twi_tx(data);		// data
 	twi_stop();
