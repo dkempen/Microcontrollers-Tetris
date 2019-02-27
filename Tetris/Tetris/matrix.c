@@ -9,7 +9,7 @@
 
 // I2C address of display
 #define D0_I2C_ADDR	((0x70 + 0) << 1)
-#define D1_I2C_ADDR	((0x70 + 1) << 1)
+#define D1_I2C_ADDR	((0x70 + 4) << 1)
 
 #include <avr/io.h>
 #include <util/delay.h>
