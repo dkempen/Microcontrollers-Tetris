@@ -30,15 +30,15 @@
     <EraseKey />
     <AsfFrameworkConfig>
       <framework-data>
-  <options />
-  <configurations />
-  <files />
-  <documentation help="" />
-  <offline-documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.34.1" />
-  </dependencies>
-</framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.34.1" />
+        </dependencies>
+      </framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
     <avrtoolserialnumber>J41800084375</avrtoolserialnumber>
@@ -138,87 +138,90 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Blocks.c">
+    <Compile Include="game\Blocks.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Blocks.h">
+    <Compile Include="game\Blocks.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Collision.c">
+    <Compile Include="game\Collision.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Collision.h">
+    <Compile Include="game\Collision.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Draw.c">
+    <Compile Include="game\Draw.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Draw.h">
+    <Compile Include="game\Draw.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Field.c">
+    <Compile Include="game\Field.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Field.h">
+    <Compile Include="game\Field.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Game.c">
+    <Compile Include="game\Game.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Game.h">
+    <Compile Include="game\Game.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="GameOver.c">
+    <Compile Include="game\GameOver.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="GameOver.h">
+    <Compile Include="game\GameOver.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="HighScoresScreen.c">
+    <Compile Include="game\HighScoresScreen.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="HighScoresScreen.h">
+    <Compile Include="game\HighScoresScreen.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="InputHandler.c">
+    <Compile Include="game\InputHandler.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="InputHandler.h">
+    <Compile Include="game\InputHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\Matrix.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\Matrix.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\Menu.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\Menu.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\Player.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\Player.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\Score.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\Score.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\StateManager.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="game\StateManager.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Matrix.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Matrix.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Menu.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Menu.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Player.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Player.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Score.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="Score.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="StateManager.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="StateManager.h">
-      <SubType>compile</SubType>
-    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="game" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

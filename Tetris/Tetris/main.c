@@ -7,6 +7,9 @@
 
 #include <avr/io.h>
 
+#include "game/StateManager.h"
+#include "game/Menu.h"
+
 int main(void)
 {
    InitStateManager();

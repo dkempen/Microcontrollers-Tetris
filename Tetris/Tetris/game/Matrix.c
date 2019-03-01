@@ -7,7 +7,7 @@
 
 #include "Matrix.h"
 
-void **Rotate(Player *player, int direction)
+void Rotate(Player *player, int direction)
 {
 	int newMatrix[4][4];
 	Block tempBlock = player->block;
