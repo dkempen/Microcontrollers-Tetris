@@ -1,8 +1,8 @@
 /*
- * easybuzz.h
+ * EasyBuzz.h
  *
  * Created: 27-Feb-19 11:06:39
- *  Author: Daan
+ * Author: Daan
  */ 
 
 #ifndef EASYBUZZ_H_

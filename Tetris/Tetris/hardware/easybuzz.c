@@ -1,15 +1,15 @@
 /*
- * easybuzz.c
+ * EasyBuzz.c
  *
  * Created: 27-Feb-19 11:05:13
- *  Author: Daan
+ * Author: Daan
  */
 
 #define F_CPU 8000000L
 
 #include <avr/io.h>
 #include <util/delay.h>
-#include "easybuzz.h"
+#include "EasyBuzz.h"
 
 void timer1Init(void);
 void wait(int);
