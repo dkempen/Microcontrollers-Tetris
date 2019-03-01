@@ -1,5 +1,5 @@
 /*
- * matrix.c
+ * DotMatrix.c
  *
  * Created: 20-Feb-19 15:12:54
  * Author: Daan
@@ -13,7 +13,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "matrix.h"
+#include "DotMatrix.h"
 
 // I2C address of the 2 displays
 #define D0_I2C_ADDR	((0x70 + 0) << 1)

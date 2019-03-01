@@ -7,7 +7,7 @@
 
 #include <avr/io.h>
 
-#include "matrix.h"
+#include "hardware/DotMatrix.h"
 
 #define F_CPU 8000000L
 
