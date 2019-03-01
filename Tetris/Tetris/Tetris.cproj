@@ -222,6 +222,12 @@
     <Compile Include="hardware\DotMatrix.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="hardware\EasyBuzz.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hardware\EasyBuzz.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>

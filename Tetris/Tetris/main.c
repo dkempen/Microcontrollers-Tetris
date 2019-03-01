@@ -7,6 +7,7 @@
 
 #include <avr/io.h>
 
+#include "hardware/EasyBuzz.h"
 #include "hardware/DotMatrix.h"
 
 #include "game/StateManager.h"
