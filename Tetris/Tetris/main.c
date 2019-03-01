@@ -7,12 +7,21 @@
 
 #include <avr/io.h>
 
+#include "hardware/DotMatrix.h"
+
 #include "game/StateManager.h"
 #include "game/Menu.h"
 
+#define F_CPU 8000000L
+
 int main(void)
 {
-   InitStateManager();
-
-   InitMenu();
+    InitStateManager();
+    InitMenu();
+	//matrix_test();
+	
+    /* Replace with your application code */
+    while (1) 
+    {
+    }
 }
