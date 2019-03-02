@@ -31,7 +31,8 @@
 #define QUARTER			1
 #define EIGHTH_DOT		0.75
 #define EIGHTH			0.5
-#define SIXTINTH		0.25
+#define SIXTEENTH_DOT	0.375
+#define SIXTEENTH		0.25
 
 #define NOTE_WAIT		20	// Amount of ms that all notes get shortened by to seperate the notes
 
@@ -55,18 +56,14 @@
 #define S6	2
 #define S7	3
 
+// Struct that holds a note (frequency and length)
 typedef struct
 {
-	const int frequency;
-	const char name[4];
-} tone_struct;
-
-typedef struct
-{
-	const tone_struct *tone;	// TODO: remove tone struct and replace it with a frequency int
-	const double length;		// length is defined as a multiplier value based on the length of a quarter note as value 1
+	const int *frequency;	// It's a pointer because it needs to get the value from the constant scales array
+	const double length;	// length is defined as a multiplier value based on the length of a quarter note as value 1
 } note_struct;
 
+// Struct that holds a song (bpm, a note array and the size of that array)
 typedef struct
 {
 	const int size;
@@ -74,16 +71,18 @@ typedef struct
 	const note_struct notes[MAX_SONG_LENGTH];
 } song_struct;
 
-const tone_struct scales[SCALE_COUNT][SCALE_LENGTH] =
-{
-	{{ 262, "C4 "}, { 277, "C#4"}, { 294, "D4 "}, { 311, "D#4"}, { 330,"E4 "}, { 349, "F4 "}, { 370,"F#4"}, { 392, "G4 "}, { 415, "G#4"}, { 440, "A4 "}, { 466, "A#4"}, { 494, "B4 "}},
-	{{ 523, "C5 "}, { 554, "C#5"}, { 587, "D5 "}, { 622, "D#5"}, { 659,"E5 "}, { 698, "F5 "}, { 740,"F#5"}, { 784, "G5 "}, { 831, "G#5"}, { 880, "A5 "}, { 932, "A#5"}, { 988, "B5 "}},
-	{{1046, "C6 "}, {1108, "C#6"}, {1174, "D6 "}, {1244, "D#6"}, {1318,"E6 "}, {1397, "F6 "}, {1480,"F#6"}, {1568, "G6 "}, {1662, "G#6"}, {1760, "A6 "}, {1865, "A#6"}, {1975, "B6 "}},
-	{{2093, "C7 "}, {2217, "C#7"}, {2349, "D7 "}, {2489, "D#7"}, {2637,"E7 "}, {2794, "F7 "}, {2960,"F#7"}, {3136, "G7 "}, {3322, "G#7"}, {3520, "A7 "}, {3729, "A#7"}, {3951, "B7 "}},
+// This 2d array holds the tone frequencies for each note in lists of scales
+const int scales[SCALE_COUNT][SCALE_LENGTH] =
+{ // C	  Cs   D	Ds	 E	  F	   Fs	G	 Gs	  A	   As	B
+	{262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494 },	// Scale 4
+	{523, 554, 587, 622, 659, 698, 740, 784, 831, 880, 932, 988 },	// Scale 5
+	{1046,1108,1174,1244,1318,1397,1480,1568,1662,1760,1865,1975},	// Scale 6
+	{2093,2217,2349,2489,2637,2794,2960,3136,3322,3520,3729,3951}	// Scale 7
 };
 
-const tone_struct rest = {0, "RST"};
+const int rest = 0;	// Is used for a rest in a song, is called the same way as a normal note with &rest
 
+// Song array that holds all the playable songs in song structs (called by index from defines in the header file)
 const song_struct songs[SONG_COUNT] =
 {
 	{	// Test song (scale)
@@ -101,18 +100,22 @@ const song_struct songs[SONG_COUNT] =
 	},
 };
 
+// Used for stopping the currently playing song (to be implemented)
 int stop_command;
-#pragma endregion defines
 
+// Helper functions
 void easybuzz_play_note(note_struct, int);
 int  easybuzz_get_duration(double, int);
 void easybuzz_wait(int);
 
+// Low level functions (hardware)
 void easybuzz_pwm_init(void);
 void easybuzz_pwm_set_frequency(int);
 void easybuzz_pwm_off(void);
+#pragma endregion defines
 
 #pragma region main_fuctions
+// Initializes the hardware for the EasyBuzz (called once at startup)
 void easybuzz_init()
 {
 	// TODO: init hardware
@@ -120,11 +123,13 @@ void easybuzz_init()
 	easybuzz_pwm_init();
 }
 
+// Plays a song from the songlist (given an index). Blocking for now, to be updated...
 void easybuzz_play(int song_index)
 {
 	// TODO: add a song queue
 	// TODO: place this in a thread and check first if there is already a song playing
 	
+	stop_command = 0;
 	song_struct song = songs[song_index];
 	int size = song.size;
 	int bpm  = song.bpm;
@@ -144,6 +149,7 @@ void easybuzz_play(int song_index)
 	}
 }
 
+// Stops the current playing song (after a note is completed)
 void easybuzz_stop()
 {
 	// TODO: check if the same can be achieved with thread library logic
@@ -152,19 +158,30 @@ void easybuzz_stop()
 #pragma endregion main_fuctions
 
 #pragma region helper_functions
+// Plays a given note (blocking) and waits in the case of a rest
 void easybuzz_play_note(note_struct note, int bpm)
 {
-	easybuzz_pwm_set_frequency(note.tone->frequency);
+	// If the note is a rest, just wait the length of the note
+	if (*note.frequency == 0)
+	{
+		easybuzz_wait(easybuzz_get_duration(note.length, bpm) + NOTE_WAIT);
+		return;
+	}
+	
+	// Else, set the pwm frequency and wait the lenth of the note
+	easybuzz_pwm_set_frequency(*note.frequency);
 	easybuzz_wait(easybuzz_get_duration(note.length, bpm));
 	easybuzz_pwm_off();
 	easybuzz_wait(NOTE_WAIT);
 }
 
+// Gets the time in milliseconds that a note should play for, given the bpm and the multiplier (where the quarter note is 1)
 int easybuzz_get_duration(double multiplier, int bpm)
 {
 	return (int) (60000 / bpm * multiplier - NOTE_WAIT);
 }
 
+// Sleep method that sleeps for the amount of given ms
 void easybuzz_wait(int ms)
 {
 	// TODO: check if the same can be achieved with thread library logic
