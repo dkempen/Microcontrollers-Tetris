@@ -12,8 +12,10 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <stdio.h>
 
 #include "EasyBuzz.h"
+#include "LinkedList.h"
 
 #pragma region defines
 // Defines for array lengths
@@ -56,23 +58,17 @@
 #define S6	2
 #define S7	3
 
-// Struct that holds a note (frequency and length)
-typedef struct
-{
-	const int *frequency;	// It's a pointer because it needs to get the value from the constant scales array
-	const double length;	// length is defined as a multiplier value based on the length of a quarter note as value 1
-} note_struct;
+// Note struct is defined in the header for access by the LinkedList
 
-// Struct that holds a song (bpm, a note array and the size of that array)
+// Struct that holds a song (bpm and a note linked list (the pointer to the head))
 typedef struct
 {
-	const int size;
-	const int bpm;
-	const note_struct notes[MAX_SONG_LENGTH];
+	int bpm;
+	node *first_note; // Head of the linked list
 } song_struct;
 
 // This 2d array holds the tone frequencies for each note in lists of scales
-const int scales[SCALE_COUNT][SCALE_LENGTH] =
+int scales[SCALE_COUNT][SCALE_LENGTH] =
 { // C	  Cs   D	Ds	 E	  F	   Fs	G	 Gs	  A	   As	B
 	{262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494 },	// Scale 4
 	{523, 554, 587, 622, 659, 698, 740, 784, 831, 880, 932, 988 },	// Scale 5
@@ -80,31 +76,21 @@ const int scales[SCALE_COUNT][SCALE_LENGTH] =
 	{2093,2217,2349,2489,2637,2794,2960,3136,3322,3520,3729,3951}	// Scale 7
 };
 
-const int rest = 0;	// Is used for a rest in a song, is called the same way as a normal note with &rest
+int rest = 0;	// Is used for a rest in a song, is called the same way as a normal note with &rest
 
 // Song array that holds all the playable songs in song structs (called by index from defines in the header file)
-const song_struct songs[SONG_COUNT] =
-{
-	{	// Test song (scale)
-		7,
-		100,
-		{
-			{&scales[S4][C], QUARTER},	// C4
-			{&scales[S4][D], QUARTER},	// D4
-			{&scales[S4][E], QUARTER},	// E4
-			{&scales[S4][F], QUARTER},	// F4
-			{&scales[S4][G], QUARTER},	// G4
-			{&scales[S4][A], QUARTER},	// A4
-			{&scales[S4][B], QUARTER}	// B4
-		}
-	},
-};
+song_struct songs[SONG_COUNT];
 
 // Used for stopping the currently playing song (to be implemented)
 int stop_command;
 
+// Main functions
+void easybuzz_init_songs(void);
+
 // Helper functions
 void easybuzz_play_note(note_struct, int);
+void easybuzz_init_song(int *, node **, int);
+void easybuzz_add_note(int, node **, int *, double);
 int  easybuzz_get_duration(double, int);
 void easybuzz_wait(int);
 
@@ -115,12 +101,33 @@ void easybuzz_pwm_off(void);
 #pragma endregion defines
 
 #pragma region main_fuctions
-// Initializes the hardware for the EasyBuzz (called once at startup)
+// Initializes the hardware and songs for the EasyBuzz (called once at startup)
 void easybuzz_init()
 {
 	// TODO: init hardware
 	stop_command = 0;
 	easybuzz_pwm_init();
+	easybuzz_init_songs();
+}
+
+void easybuzz_init_songs(void)
+{
+	int s = -1;
+	node *n;
+	
+	// Test (octave)
+	easybuzz_init_song(&s, &n, 100);
+	easybuzz_add_note(s, &n, &scales[S4][C], QUARTER);
+	easybuzz_add_note(s, &n, &scales[S4][D], QUARTER);
+	easybuzz_add_note(s, &n, &scales[S4][E], QUARTER);
+	easybuzz_add_note(s, &n, &scales[S4][F], QUARTER);
+	easybuzz_add_note(s, &n, &scales[S4][G], QUARTER);
+	easybuzz_add_note(s, &n, &scales[S4][A], QUARTER);
+	easybuzz_add_note(s, &n, &scales[S4][B], QUARTER);
+	
+	// Tetris (to be continued...)
+	easybuzz_init_song(&s, &n, 150);
+	easybuzz_add_note(s, &n, &scales[S5][E], QUARTER);
 }
 
 // Plays a song from the songlist (given an index). Blocking for now, to be updated...
@@ -131,10 +138,10 @@ void easybuzz_play(int song_index)
 	
 	stop_command = 0;
 	song_struct song = songs[song_index];
-	int size = song.size;
+	node *current_node = songs[song_index].first_note;
 	int bpm  = song.bpm;
 	
-	for(int i = 0; i < size; i++)
+	while(1)
 	{
 		// TODO: check if the same can be achieved with thread library logic
 		// If the stop command has been given (1), stop playing and set the command to 0 again
@@ -144,8 +151,13 @@ void easybuzz_play(int song_index)
 			return;
 		}
 		
+		// check if current_node == NULL, then the song is finished (current_node gets shifted automatically)
+		note_struct note = llist_get(&current_node);
+		if (current_node == NULL)
+			return;
+		
 		// Play the next note of the song
-		easybuzz_play_note(song.notes[i], bpm);
+		easybuzz_play_note(note, bpm);
 	}
 }
 
@@ -179,6 +191,23 @@ void easybuzz_play_note(note_struct note, int bpm)
 int easybuzz_get_duration(double multiplier, int bpm)
 {
 	return (int) (60000 / bpm * multiplier - NOTE_WAIT);
+}
+
+// Initializes the song for the current song struct (sets bpm, and creates a linked list)
+void easybuzz_init_song(int *song_index, node **head_node, int bpm)
+{
+	(*song_index)++;
+	song_struct song = {.bpm = bpm};
+	songs[*song_index] = song;
+	songs[*song_index].first_note = llist_create();
+	*head_node = songs[*song_index].first_note;
+}
+
+// Adds a note on the end of the note linked list of a song given the song index, last node pointer, and the note fields
+void easybuzz_add_note(int song_index, node **last_node, int *frequency, double length)
+{
+	note_struct note = {frequency, length};
+	llist_add_last(last_node, note);
 }
 
 // Sleep method that sleeps for the amount of given ms
