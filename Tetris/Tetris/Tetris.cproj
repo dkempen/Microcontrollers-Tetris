@@ -29,16 +29,16 @@
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <EraseKey />
     <AsfFrameworkConfig>
-      <framework-data xmlns="">
-        <options />
-        <configurations />
-        <files />
-        <documentation help="" />
-        <offline-documentation help="" />
-        <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.45.0" />
-        </dependencies>
-      </framework-data>
+      <framework-data>
+  <options />
+  <configurations />
+  <files />
+  <documentation help="" />
+  <offline-documentation help="" />
+  <dependencies>
+    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.34.1" />
+  </dependencies>
+</framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
     <avrtoolserialnumber>J41800084375</avrtoolserialnumber>
@@ -226,6 +226,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="hardware\EasyBuzz.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hardware\SegDisplay.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hardware\SegDisplay.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
