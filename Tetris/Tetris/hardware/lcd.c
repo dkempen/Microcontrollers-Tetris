@@ -62,22 +62,43 @@ void lcd_writechar(unsigned char byte)
 void lcd_write_firstline(char* string)
 {
 	int i = 0;
-	// todo set position to 0
-	for (i = 0; string[i] 1= '\0'; i++)
+	lcd_set_cursor(0);
+	for (i = 0; string[i] != '\0'; i++)
 	{
 		lcd_writechar(string[i]);
 	}
 		
 }
 
-void lcd_write_second(char* string)
+void lcd_write_secondline(char* string)
 {
 	int i = 0;
-	// todo set position to second line
-	for (i = 0; string[i] 1= '\0'; i++)
+	lcd_set_cursor(16);
+	for (i = 0; string[i] != '\0'; i++)
 	{
 		lcd_writechar(string[i]);
 	}
+}
+
+void lcd_write_command(unsigned char byte)
+{
+	// First nibble.
+	PORTC = byte;
+	PORTC &= ~(1<<LCD_RS);
+	lcd_strobe_lcd_e();
+
+	// Second nibble
+	PORTC = (byte<<4);
+	PORTC &= ~(1<<LCD_RS);
+	lcd_strobe_lcd_e();
+}
+
+void lcd_set_cursor(int position)
+{
+	if (position >= 0 && position < 16)
+	lcd_write_command(position + 128);
+	else if (position < 32)
+	lcd_write_command(position + 192 - 16);
 }
 
 void lcd_clear()
@@ -87,7 +108,4 @@ void lcd_clear()
 	PORTC = 0x10;
 	lcd_strobe_lcd_e();
 }
-
-
-
 
