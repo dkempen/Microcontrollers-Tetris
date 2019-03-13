@@ -6,8 +6,10 @@
  */ 
 
 #include <stdio.h>
-#include <time.h>
+//#include <time.h>
 #include <avr/io.h>
+
+#include "../util/Random.h"
 
 #include "Game.h"
 #include "GameOver.h"
@@ -61,7 +63,7 @@ void RunGame(void)
 		DrawField(GetField(), GetPlayer());
 
 		//CheckForInput();
-		AiInput(millisCounter);
+		AiInput();
 		UpdatePlayer();
 
 		if (millisCounter >= 1000)
@@ -86,7 +88,7 @@ void SpawnNewBlock(void)
 	//srand(millisCounter);
 	//int num = (rand()) % 7;
 
-	InitPlayer(3, 0, millisCounter % 8);
+	InitPlayer(3, 0, GetSeed() % 8);
 	
 	//If the newly spawned player block is overlapping with the blocks filling the field
 	// then set the state to GameOver
