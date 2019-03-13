@@ -17,7 +17,7 @@ enum Inputs {IDLE, MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, TURN_LEFT, TURN_RIGHT};
 
 
 void CheckForInput(void);
-void AiInput(void);
+void AiInput(int seed);
 int GetCurrentInput(void);
 
 

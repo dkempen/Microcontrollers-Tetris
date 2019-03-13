@@ -6,21 +6,24 @@
  */ 
 
 #include "Draw.h"
+#include "../hardware/DotMatrix.h"
+#include "../hardware/SegDisplay.h"
 #include <stdio.h>
 
 void DrawMenu(void)
 {
 	//TODO: Use lcd display
 	
-	printf("Tetris\n\n");
-	printf("Press w to play, press s to exit\n\n");
-	printf("Press x to view the highscores\n");
+//	printf("Tetris\n\n");
+//	printf("Press w to play, press s to exit\n\n");
+//	printf("Press x to view the highscores\n");
 }
 
 void DrawScore(int score)
 {
 	//TODO: Use 7 segment display
-	printf("Score: %i\n", score);
+//	printf("Score: %i\n", score);    
+	writeLedScore(score);
 }
 
 void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player)
@@ -45,7 +48,20 @@ void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player)
 		}
 	}
 
-	
+/*
+	int field22[FIELD_WIDTH][FIELD_LENGTH] =	   
+	                   {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
+*/
+	matrix_draw_game_field(tempField);
+
+	/*
 	//Draw the field
 	for (int y = 0; y < FIELD_LENGTH; y++) {
 		for (int x = 0; x < FIELD_WIDTH; x++) {
@@ -60,31 +76,33 @@ void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player)
 		}
 		printf("\n");
 	}
+	*/
 }
 
 void DrawGameOverScreen(int score, int isHighScore)
 {
 	//TODO: Use lcd display
 	
-	printf("Game Over!\n\n");
+//	printf("Game Over!\n\n");
 
-	printf("Your score: %i\n\n", score);
+//	printf("Your score: %i\n\n", score);
 
-	if (isHighScore == 0)
-	printf("New Highscore!\n\n");
-
-	printf("Press a to go again, press d to return to menu\n\n");
+	if (isHighScore == 0){
+//	printf("New Highscore!\n\n");
+	}
+	
+//	printf("Press a to go again, press d to return to menu\n\n");
 }
 
 void DrawHighScoresScreen(int * highscores, int amount)
 {
 	//TODO: Use lcd display
 	
-	printf("High Scores\n\n");
+//	printf("High Scores\n\n");
 
 	for (int i = 0; i < amount; i++) {
-		printf("%i. %i\n", (i + 1), highscores[i]);
+	//	printf("%i. %i\n", (i + 1), highscores[i]);
 	}
 
-	printf("\nPress z to return to the menu screen\n");
+//	printf("\nPress z to return to the menu screen\n");
 }

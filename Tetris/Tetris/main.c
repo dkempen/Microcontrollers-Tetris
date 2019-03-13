@@ -9,6 +9,7 @@
 
 #include "hardware/EasyBuzz.h"
 #include "hardware/DotMatrix.h"
+#include "hardware/SegDisplay.h"
 
 #include "game/StateManager.h"
 #include "game/Menu.h"
@@ -16,11 +17,13 @@
 #define F_CPU 8000000L
 
 int main(void)
-{
+{	
+	SegDisplay_Init();
+	
+	matrix_init();
     InitStateManager();
     InitMenu();
-	//matrix_test();
-	
+		
     /* Replace with your application code */
     while (1) 
     {

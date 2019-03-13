@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <avr/io.h>
 
 #include "Game.h"
 #include "GameOver.h"
@@ -21,7 +22,9 @@
 #include "Score.h"
 #include "Collision.h"
 
+#define MILLISEC 128
 
+int millisCounter;
 
 void InitGame(void)
 {
@@ -35,28 +38,38 @@ void InitGame(void)
 
 void RunGame(void)
 {
+	TCCR1B |= ((1 << CS10) | (1 << CS11));
+	
+	//Tracks millisecond loops
+	millisCounter = 0;
+	
 	SpawnNewBlock();
-
-	int startTime = time(NULL);
-
+	
 	while (GetState() == STATE_GAME)
 	{
-		//system("cls"); For clearing command prompt, not needed in BIGAVR
-
+		
+		if(TCNT1 >= MILLISEC){
+			TCNT1 = 0;
+			millisCounter += 1;
+		}
+		
+		if(millisCounter % 250 != 0){
+			continue;
+		}
+		
 		DrawScore(GetScore());
 		DrawField(GetField(), GetPlayer());
 
-		int currentTime = time(NULL);
-		//Sleep(250); TODO: Implement a deltatime for 4 rotations per second
-
-		CheckForInput();
+		//CheckForInput();
+		AiInput(millisCounter);
 		UpdatePlayer();
 
-		if (currentTime - startTime >= 1)
+		if (millisCounter >= 1000)
 		{
-			startTime = time(NULL);
-
 			MoveDown();
+			millisCounter = 0;
+			TCNT1 = 0;
+			
 		}
 	}
 
@@ -70,10 +83,10 @@ void SpawnNewBlock(void)
 {
 	CheckForFullRow();
 
-	srand(time(NULL));
-	int num = rand() % 7;
+	//srand(millisCounter);
+	//int num = (rand()) % 7;
 
-	InitPlayer(3, 0, num);
+	InitPlayer(3, 0, millisCounter % 8);
 	
 	//If the newly spawned player block is overlapping with the blocks filling the field
 	// then set the state to GameOver
@@ -84,3 +97,4 @@ void SpawnNewBlock(void)
 	}
 	
 }
+
