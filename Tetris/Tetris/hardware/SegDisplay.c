@@ -26,7 +26,7 @@ void SegDisplay_Init()
 	displayDriverInit();
 }
 
-void spi_masterInit()
+void SegDisplay_masterInit()
 {
 	DDR_SPI = 0xff;
 	// All pins output: MOSI, SCK, SS, SS_display as output
@@ -76,7 +76,7 @@ void spi_slaveDeSelect(unsigned char chipNumber)
 }
 
 // Initialize the driver chip (type MAX 7219)
-void displayDriverInit()
+void SegDisplay_DriverInit()
 {
 	spi_slaveSelect(0);
 	// Select display chip (MAX7219)
@@ -117,7 +117,7 @@ void displayDriverInit()
 
 
 // Set display on ('normal operation')
-void displayOn()
+void SegDisplay_displayOn()
 {
 	spi_slaveSelect(0);
 	// Select display chip
@@ -130,7 +130,7 @@ void displayOn()
 }
 
 // Set display off ('shut down')
-void displayOff()
+void SegDisplay_displayOff()
 {
 	spi_slaveSelect(0);
 	// Select display chip
@@ -142,7 +142,7 @@ void displayOff()
 	// Deselect display chip
 }
 
-void spi_writeWord (unsigned char adress, unsigned char data)
+void SegDisplay_writeWord (unsigned char adress, unsigned char data)
 {
 	spi_slaveSelect(0);
 	// Select display chip
@@ -154,7 +154,7 @@ void spi_writeWord (unsigned char adress, unsigned char data)
 	// Deselect display chip
 }
 
-void writeLedDisplay(int value)
+void SegDisplay_writeLedDisplay(int value)
 {
 	if (value < 0)
 	{
@@ -173,7 +173,7 @@ void writeLedDisplay(int value)
 	
 }
 
-void writeLedScore(int score)
+void SegDisplay_writeLedScore(int score)
 {
 	writeLedDisplay(score);
 }	
