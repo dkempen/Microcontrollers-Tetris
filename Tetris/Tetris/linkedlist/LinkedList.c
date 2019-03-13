@@ -1,3 +1,6 @@
+// Ignore pragma warnings, because Atmel doesn't like code regions for some reason
+#pragma GCC diagnostic ignored "-Wunknown-pragmas"
+
 #include "LinkedList.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,44 +12,12 @@ node *llist_create()
 	return head;
 }
 
-// Print the list
-void llist_print(node *head)
+// Gets the data of the current node and shifts the current node to the next node
+note_struct llist_get(node **current_node)
 {
-	node *current = head;
-
-	if (current != NULL)
-	{
-		printf("Content of the linkedList:\n");
-
-		while (current != NULL)
-		{
-			printf("%d\n", current->data);
-			current = current->next;
-		}
-	}
-	else
-		printf("The list is empty\n");
-}
-
-// Add an item to the end of the list
-void llist_add(node **head, note_struct data)
-{
-	node *current = *head;
-	if (current == NULL)
-	{
-		current = (node*)malloc(sizeof(node));
-		current->data = data;
-		current->next = NULL;
-		*head = current;
-		return;
-	}
-
-	while (current->next != NULL)
-		current = current->next;
-
-	current->next = malloc(sizeof(node));
-	current->next->data = data;
-	current->next->next = NULL;
+	note_struct note = (*current_node)->data;
+	*current_node = (*current_node)->next;
+	return note;
 }
 
 // Add an item to the end of the list with a previous node pointer as parameter
@@ -61,6 +32,28 @@ void llist_add_last(node **last_node, note_struct data)
 		*last_node = current;
 		return;
 	}
+
+	current->next = malloc(sizeof(node));
+	current->next->data = data;
+	current->next->next = NULL;
+}
+
+#pragma region unused_functions
+// Add an item to the end of the list
+void llist_add(node **head, note_struct data)
+{
+	node *current = *head;
+	if (current == NULL)
+	{
+		current = (node*)malloc(sizeof(node));
+		current->data = data;
+		current->next = NULL;
+		*head = current;
+		return;
+	}
+
+	while (current->next != NULL)
+	current = current->next;
 
 	current->next = malloc(sizeof(node));
 	current->next->data = data;
@@ -82,10 +75,10 @@ void llist_push(node **head, note_struct data)
 note_struct llist_pop(node** head)
 {
 	node *nextNode = NULL;
-	int value = -1;
+	note_struct value;
 
 	if (*head == NULL)
-		return -1;
+		return value;
 
 	nextNode = (*head)->next;
 	value = (*head)->data;
@@ -99,7 +92,7 @@ note_struct llist_pop(node** head)
 note_struct llist_removeLast(node **head)
 {
 	node *current = *head;
-	int value = 0;
+	note_struct value;
 	/* if there is only one item in the list, remove it */
 	if (current->next == NULL)
 	{
@@ -123,7 +116,7 @@ note_struct llist_removeLast(node **head)
 note_struct llist_remove(node **head, int index)
 {
 	node *current = *head;
-	int value = -1;
+	note_struct value;
 
 	if (index == 0)
 		return llist_pop(head);
@@ -142,14 +135,6 @@ note_struct llist_remove(node **head, int index)
 	free(tempNode);
 
 	return value;
-}
-
-// Gets the data of the current node and shifts the current node to the next node
-note_struct llist_get(node **current_node)
-{
-	note_struct note = *current_node->data;
-	*current_node = *current_node->next;
-	return note;
 }
 
 // Clear the list (delete everything from memory)
@@ -181,22 +166,6 @@ int llist_size(node *head)
 	return size;
 }
 
-// Check if an item excists (returns index)
-int llist_excist(node *head, note_struct data)
-{
-	node *current = head;
-
-	int index = 0;
-	while (current != NULL)
-	{
-		if (current->data == data)
-			return index;
-		current = current->next;
-		index++;
-	}
-	return -1;
-}
-
 // Make a deep copy of the list
 node *llist_copy(struct node *head)
 {
@@ -211,3 +180,4 @@ node *llist_copy(struct node *head)
 
 	return headCopy;
 }
+#pragma endregion unused_functions

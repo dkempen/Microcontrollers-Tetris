@@ -15,22 +15,21 @@
 #include <stdio.h>
 
 #include "EasyBuzz.h"
-#include "LinkedList.h"
+#include "../linkedlist/LinkedList.h"
 
 #pragma region defines
 // Defines for array lengths
-#define MAX_SONG_LENGTH 10
 #define SONG_COUNT		2
 
 #define SCALE_LENGTH	12
 #define SCALE_COUNT		4
 
 // Note lengths
-#define FULL			4
-#define HALF_DOT		3
-#define HALF			2
+#define FULL			4.0
+#define HALF_DOT		3.0
+#define HALF			2.0
 #define QUARTER_DOT		1.5
-#define QUARTER			1
+#define QUARTER			1.0
 #define EIGHTH_DOT		0.75
 #define EIGHTH			0.5
 #define SIXTEENTH_DOT	0.375
@@ -90,7 +89,7 @@ void easybuzz_init_songs(void);
 // Helper functions
 void easybuzz_play_note(note_struct, int);
 void easybuzz_init_song(int *, node **, int);
-void easybuzz_add_note(int, node **, int *, double);
+void easybuzz_add_note(int, node **, double, double);
 int  easybuzz_get_duration(double, int);
 void easybuzz_wait(int);
 
@@ -110,6 +109,12 @@ void easybuzz_init()
 	easybuzz_init_songs();
 }
 
+void easybuzz_test()
+{
+	easybuzz_init();
+	easybuzz_play(SONG_TEST);
+}
+
 void easybuzz_init_songs(void)
 {
 	int s = -1;
@@ -117,17 +122,17 @@ void easybuzz_init_songs(void)
 	
 	// Test (octave)
 	easybuzz_init_song(&s, &n, 100);
-	easybuzz_add_note(s, &n, &scales[S4][C], QUARTER);
-	easybuzz_add_note(s, &n, &scales[S4][D], QUARTER);
-	easybuzz_add_note(s, &n, &scales[S4][E], QUARTER);
-	easybuzz_add_note(s, &n, &scales[S4][F], QUARTER);
-	easybuzz_add_note(s, &n, &scales[S4][G], QUARTER);
-	easybuzz_add_note(s, &n, &scales[S4][A], QUARTER);
-	easybuzz_add_note(s, &n, &scales[S4][B], QUARTER);
+	easybuzz_add_note(s, &n, scales[S4][C], QUARTER);
+	easybuzz_add_note(s, &n, scales[S4][D], QUARTER);
+	easybuzz_add_note(s, &n, scales[S4][E], QUARTER);
+	easybuzz_add_note(s, &n, scales[S4][F], QUARTER);
+	easybuzz_add_note(s, &n, scales[S4][G], QUARTER);
+	easybuzz_add_note(s, &n, scales[S4][A], QUARTER);
+	easybuzz_add_note(s, &n, scales[S4][B], QUARTER);
 	
 	// Tetris (to be continued...)
 	easybuzz_init_song(&s, &n, 150);
-	easybuzz_add_note(s, &n, &scales[S5][E], QUARTER);
+	easybuzz_add_note(s, &n, scales[S5][E], QUARTER);
 }
 
 // Plays a song from the songlist (given an index). Blocking for now, to be updated...
@@ -137,9 +142,8 @@ void easybuzz_play(int song_index)
 	// TODO: place this in a thread and check first if there is already a song playing
 	
 	stop_command = 0;
-	song_struct song = songs[song_index];
 	node *current_node = songs[song_index].first_note;
-	int bpm  = song.bpm;
+	int bpm  = songs[song_index].bpm;
 	
 	while(1)
 	{
@@ -174,14 +178,14 @@ void easybuzz_stop()
 void easybuzz_play_note(note_struct note, int bpm)
 {
 	// If the note is a rest, just wait the length of the note
-	if (*note.frequency == 0)
+	if (note.frequency == 0)
 	{
 		easybuzz_wait(easybuzz_get_duration(note.length, bpm) + NOTE_WAIT);
 		return;
 	}
 	
 	// Else, set the pwm frequency and wait the lenth of the note
-	easybuzz_pwm_set_frequency(*note.frequency);
+	easybuzz_pwm_set_frequency(note.frequency);
 	easybuzz_wait(easybuzz_get_duration(note.length, bpm));
 	easybuzz_pwm_off();
 	easybuzz_wait(NOTE_WAIT);
@@ -204,9 +208,9 @@ void easybuzz_init_song(int *song_index, node **head_node, int bpm)
 }
 
 // Adds a note on the end of the note linked list of a song given the song index, last node pointer, and the note fields
-void easybuzz_add_note(int song_index, node **last_node, int *frequency, double length)
+void easybuzz_add_note(int song_index, node **last_node, double frequency, double length)
 {
-	note_struct note = {frequency, length};
+	note_struct note = {.frequency = frequency, .length = length};
 	llist_add_last(last_node, note);
 }
 
@@ -222,79 +226,21 @@ void easybuzz_wait(int ms)
 #pragma region low_level_functions
 void easybuzz_pwm_init()
 {
-	// TODO: control hardware
+	DDRB = 0xFF;
+	TCCR1A = 0b10000010;		// compare output at OC1A  (=PB5)
+	TCCR1B = 0b00011000;		// fast PWM, TOP=ICR1, prescaler=8, RUN
 }
 
 void easybuzz_pwm_set_frequency(int frequency)
 {
-	// TODO: control hardware
+	TCCR1B |= (1 << CS11);		// Turn on the 8 times prescaler (which starts the timer)
+	ICR1	= frequency;		// TOP value for counter
+	OCR1A	= frequency / 2;	// compare value in between
 }
 
 void easybuzz_pwm_off()
 {
-	// TODO: control hardware
+	TCCR1B |= (0 << CS11);		// Turn off the prescaler (which stops the timer)
+	TCCR1B = 0b00011000;		// fast PWM, TOP=ICR1, prescaler=8, NO RUN
 }
 #pragma endregion low_level_functions
-
-#pragma region old_code
-void timer1Init(void);
-
-#define TIMER1_PRESCALER (uint8_t) 8
-
-const uint16_t A4_FREQ = 440;
-const uint16_t C5_FREQ = 523;
-const uint16_t D6_FREQ = 1175;
-#define A4 (F_CPU / (A4_FREQ * TIMER1_PRESCALER * 2) - 1)
-#define C5 (F_CPU / (C5_FREQ * TIMER1_PRESCALER * 2) - 1)
-#define D6 (F_CPU / (D6_FREQ * TIMER1_PRESCALER * 2) - 1)
-
-void easybuzz_test()
-{
-	// 	DDRE = 0xFF;				// set PORTA for output
-	// 	timer1Init();
-	// 	while (1)
-	// 	{
-	// 		DDRE = ICR1;
-	// 		wait(1);
-	// 	}
-	DDRE = 0xFF;				// set PORTA for output
-
-	// Set OC1A as output pin
-	DDRE = (1 << PINB1);
-
-	// Set Timer1, mode CTC, toggle on compare, prescale 8
-	//TCCR1A = (1 << COM1A0);
-	//TCCR1B = (1 << WGM12)|(1 << CS10);
-	TCCR1A = 0b10000010;		// compare output at OC1A  (=PB5)
-	TCCR1B = 0b00011010;		// fast PWM, TOP=ICR1, prescaler=8, RUN
-
-	while (1)
-	{
-		// play A4 for 0.5 sec
-		ICR1 = A4*2;
-		OCR1A = A4;
-		easybuzz_wait(500);
-
-		// play C5 for 0.5 sec
-		ICR1 = C5*2;
-		OCR1A = C5;
-		easybuzz_wait(500);
-
-		// play D6 for 0.5 sec
-		ICR1 = D6*2;
-		OCR1A = D6;
-		easybuzz_wait(500);
-	}
-}
-
-#define INTERVAL	2273		// kamertoon = a’ = A4= 440 Hz
-
-// Initialize timer 1: fast PWM at OC1A
-void timer1Init( void )
-{
-	ICR1	= INTERVAL;			// TOP value for counter
-	OCR1A	= INTERVAL/2;		// compare value in between
-	TCCR1A = 0b10000010;		// compare output at OC1A  (=PB5)
-	TCCR1B = 0b00011010;		// fast PWM, TOP=ICR1, prescaler=8, RUN
-}
-#pragma endregion old_code

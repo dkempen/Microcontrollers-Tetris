@@ -15,7 +15,7 @@
 // Struct that holds a note (frequency and length)
 typedef struct
 {
-	int *frequency;	// It's a pointer because it needs to get the value from the constant scales array
+	double frequency;	// It's a pointer because it needs to get the value from the constant scales array
 	double length;	// length is defined as a multiplier value based on the length of a quarter note as value 1
 } note_struct;
 
