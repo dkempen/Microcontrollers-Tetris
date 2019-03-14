@@ -89,7 +89,7 @@ void easybuzz_init_songs(void);
 // Helper functions
 void easybuzz_play_note(note_struct, int);
 void easybuzz_init_song(int *, node **, int);
-void easybuzz_add_note(int, node **, double, double);
+void easybuzz_add_note(node **, double, double);
 int  easybuzz_get_duration(double, int);
 void easybuzz_wait(int);
 
@@ -119,20 +119,22 @@ void easybuzz_init_songs(void)
 {
 	int s = -1;
 	node *n;
-	
+
 	// Test (octave)
 	easybuzz_init_song(&s, &n, 100);
-	easybuzz_add_note(s, &n, scales[S4][C], QUARTER);
-	easybuzz_add_note(s, &n, scales[S4][D], QUARTER);
-	easybuzz_add_note(s, &n, scales[S4][E], QUARTER);
-	easybuzz_add_note(s, &n, scales[S4][F], QUARTER);
-	easybuzz_add_note(s, &n, scales[S4][G], QUARTER);
-	easybuzz_add_note(s, &n, scales[S4][A], QUARTER);
-	easybuzz_add_note(s, &n, scales[S4][B], QUARTER);
-	
+	easybuzz_add_note(&n, scales[S4][C], QUARTER);
+	easybuzz_add_note(&n, scales[S4][D], QUARTER);
+	easybuzz_add_note(&n, scales[S4][E], QUARTER);
+	easybuzz_add_note(&n, scales[S4][F], QUARTER);
+	easybuzz_add_note(&n, scales[S4][G], QUARTER);
+	easybuzz_add_note(&n, scales[S4][A], QUARTER);
+	easybuzz_add_note(&n, scales[S4][B], QUARTER);
+	songs[s].first_note = n;
+
 	// Tetris (to be continued...)
 	easybuzz_init_song(&s, &n, 150);
-	easybuzz_add_note(s, &n, scales[S5][E], QUARTER);
+	easybuzz_add_note(&n, scales[S5][E], QUARTER);
+	songs[s].first_note = n;
 }
 
 // Plays a song from the songlist (given an index). Blocking for now, to be updated...
@@ -140,12 +142,12 @@ void easybuzz_play(int song_index)
 {
 	// TODO: add a song queue
 	// TODO: place this in a thread and check first if there is already a song playing
-	
+
 	stop_command = 0;
 	node *current_node = songs[song_index].first_note;
-	int bpm  = songs[song_index].bpm;
-	
-	while(1)
+	int bpm = songs[song_index].bpm;
+
+	while (1)
 	{
 		// TODO: check if the same can be achieved with thread library logic
 		// If the stop command has been given (1), stop playing and set the command to 0 again
@@ -154,12 +156,12 @@ void easybuzz_play(int song_index)
 			stop_command = 0;
 			return;
 		}
-		
+
 		// check if current_node == NULL, then the song is finished (current_node gets shifted automatically)
 		note_struct note = llist_get(&current_node);
 		if (current_node == NULL)
 			return;
-		
+
 		// Play the next note of the song
 		easybuzz_play_note(note, bpm);
 	}
@@ -183,9 +185,9 @@ void easybuzz_play_note(note_struct note, int bpm)
 		easybuzz_wait(easybuzz_get_duration(note.length, bpm) + NOTE_WAIT);
 		return;
 	}
-	
+
 	// Else, set the pwm frequency and wait the lenth of the note
-	easybuzz_pwm_set_frequency(note.frequency);
+	easybuzz_pwm_set_frequency((int)note.frequency);
 	easybuzz_wait(easybuzz_get_duration(note.length, bpm));
 	easybuzz_pwm_off();
 	easybuzz_wait(NOTE_WAIT);
@@ -194,23 +196,24 @@ void easybuzz_play_note(note_struct note, int bpm)
 // Gets the time in milliseconds that a note should play for, given the bpm and the multiplier (where the quarter note is 1)
 int easybuzz_get_duration(double multiplier, int bpm)
 {
-	return (int) (60000 / bpm * multiplier - NOTE_WAIT);
+	return (int)(60000.0 / bpm * multiplier - NOTE_WAIT);
 }
 
 // Initializes the song for the current song struct (sets bpm, and creates a linked list)
 void easybuzz_init_song(int *song_index, node **head_node, int bpm)
 {
 	(*song_index)++;
-	song_struct song = {.bpm = bpm};
+	song_struct song = { .bpm = bpm };
 	songs[*song_index] = song;
-	songs[*song_index].first_note = llist_create();
-	*head_node = songs[*song_index].first_note;
+	node* head = llist_create();
+	*head_node = head;
+	songs[*song_index].first_note = head;
 }
 
 // Adds a note on the end of the note linked list of a song given the song index, last node pointer, and the note fields
-void easybuzz_add_note(int song_index, node **last_node, double frequency, double length)
+void easybuzz_add_note(node **last_node, double frequency, double length)
 {
-	note_struct note = {.frequency = frequency, .length = length};
+	note_struct note = {.frequency = frequency, .length = length };
 	llist_add_last(last_node, note);
 }
 
