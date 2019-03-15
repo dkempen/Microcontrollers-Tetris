@@ -14,8 +14,11 @@ void lcd_writechar(unsigned char byte);
 void lcd_strobe_lcd_e(void);
 void lcd_write_secondline(char* string);
 void lcd_write_firstline(char* string);
+void lcd_set_cursor(int position);
 void lcd_init(void);
 void lcd_write_command(unsigned char byte);
+void lcd_write_string(char *str);
+void lcd_write_data(unsigned char byte);
 
 
 

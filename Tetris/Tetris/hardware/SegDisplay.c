@@ -22,8 +22,8 @@
 void SegDisplay_Init()
 {
 	DDRB = 0x01;
-	spi_masterInit();
-	displayDriverInit();
+	SegDisplay_masterInit();
+	SegDisplay_DriverInit();
 }
 
 void SegDisplay_masterInit()

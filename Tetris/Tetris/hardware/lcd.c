@@ -28,6 +28,8 @@ void lcd_init(void)
 	DDRC = 0xFF;
 	PORTC = 0x00;
 
+	
+	
 	PORTC = 0x20;   // function set
 	lcd_strobe_lcd_e();
 	PORTC = 0x80;
@@ -59,6 +61,19 @@ void lcd_writechar(unsigned char byte)
 	lcd_strobe_lcd_e();
 }
 
+void lcd_write_data(unsigned char byte)
+{
+	// First nibble.
+	PORTC = byte;
+	PORTC |= (1<<LCD_RS);
+	lcd_strobe_lcd_e();
+
+	// Second nibble
+	PORTC = (byte<<4);
+	PORTC |= (1<<LCD_RS);
+	lcd_strobe_lcd_e();
+}
+
 void lcd_write_firstline(char* string)
 {
 	int i = 0;
@@ -68,6 +83,12 @@ void lcd_write_firstline(char* string)
 		lcd_writechar(string[i]);
 	}
 		
+}
+
+void lcd_write_string(char *str)
+{
+	for(;*str; str++)
+		lcd_writechar(*str);
 }
 
 void lcd_write_secondline(char* string)
