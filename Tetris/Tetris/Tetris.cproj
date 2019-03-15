@@ -237,9 +237,16 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="NewFolder1\LinkedList.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\LinkedList.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="game" />
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="hardware" />
