@@ -228,19 +228,19 @@
     <Compile Include="hardware\EasyBuzz.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="linkedlist\LinkedList.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="linkedlist\LinkedList.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\LinkedList.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="NewFolder1\LinkedList.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="game" />
-    <Folder Include="linkedlist" />
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="hardware" />
