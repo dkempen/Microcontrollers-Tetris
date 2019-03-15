@@ -36,7 +36,7 @@
   <documentation help="" />
   <offline-documentation help="" />
   <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.34.1" />
+    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.37" />
   </dependencies>
 </framework-data>
     </AsfFrameworkConfig>
@@ -237,16 +237,16 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="NewFolder1\LinkedList.c">
+    <Compile Include="util\LinkedList.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="NewFolder1\LinkedList.h">
+    <Compile Include="util\LinkedList.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="game" />
-    <Folder Include="NewFolder1\" />
+    <Folder Include="util" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="hardware" />

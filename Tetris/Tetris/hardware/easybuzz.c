@@ -15,7 +15,7 @@
 #include <stdio.h>
 
 #include "EasyBuzz.h"
-#include "../linkedlist/LinkedList.h"
+#include "../util/LinkedList.h"
 
 #pragma region defines
 // Defines for array lengths
