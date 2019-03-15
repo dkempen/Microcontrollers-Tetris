@@ -112,7 +112,7 @@ void easybuzz_init()
 void easybuzz_test()
 {
 	easybuzz_init();
-	easybuzz_play(SONG_TEST);
+	easybuzz_play(SONG_TETRIS);
 }
 
 void easybuzz_init_songs(void)
@@ -121,7 +121,7 @@ void easybuzz_init_songs(void)
 	node *n;
 
 	// Test (octave)
-	easybuzz_init_song(&s, &n, 100);
+	easybuzz_init_song(&s, &n, 200);
 	easybuzz_add_note(&n, scales[S4][C], QUARTER);
 	easybuzz_add_note(&n, scales[S4][D], QUARTER);
 	easybuzz_add_note(&n, scales[S4][E], QUARTER);
@@ -129,10 +129,22 @@ void easybuzz_init_songs(void)
 	easybuzz_add_note(&n, scales[S4][G], QUARTER);
 	easybuzz_add_note(&n, scales[S4][A], QUARTER);
 	easybuzz_add_note(&n, scales[S4][B], QUARTER);
+	easybuzz_add_note(&n, scales[S5][C], QUARTER);
 	songs[s].first_note = n;
 
 	// Tetris (to be continued...)
 	easybuzz_init_song(&s, &n, 150);
+	easybuzz_add_note(&n, scales[S5][E], QUARTER);
+	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
+	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S5][D], QUARTER);
+	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S4][A], QUARTER_DOT);
+	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	
 	easybuzz_add_note(&n, scales[S5][E], QUARTER);
 	songs[s].first_note = n;
 }
@@ -158,9 +170,9 @@ void easybuzz_play(int song_index)
 		}
 
 		// check if current_node == NULL, then the song is finished (current_node gets shifted automatically)
-		note_struct note = llist_get(&current_node);
 		if (current_node == NULL)
 			return;
+		note_struct note = llist_get(&current_node);
 
 		// Play the next note of the song
 		easybuzz_play_note(note, bpm);
@@ -237,8 +249,9 @@ void easybuzz_pwm_init()
 void easybuzz_pwm_set_frequency(int frequency)
 {
 	TCCR1B |= (1 << CS11);		// Turn on the 8 times prescaler (which starts the timer)
-	ICR1	= frequency;		// TOP value for counter
-	OCR1A	= frequency / 2;	// compare value in between
+	int ms = (int)(1.0 / frequency * 1000000.0);
+	ICR1	= ms;		// TOP value for counter
+	OCR1A	= ms / 2;	// compare value in between
 }
 
 void easybuzz_pwm_off()
