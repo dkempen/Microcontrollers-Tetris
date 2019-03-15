@@ -132,7 +132,7 @@ void easybuzz_init_songs(void)
 	easybuzz_add_note(&n, scales[S5][C], QUARTER);
 	songs[s].first_note = n;
 
-	// Tetris (to be continued...)
+	// Tetris Theme
 	easybuzz_init_song(&s, &n, 150);
 	easybuzz_add_note(&n, scales[S5][E], QUARTER);
 	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
@@ -146,6 +146,50 @@ void easybuzz_init_songs(void)
 	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
 	
 	easybuzz_add_note(&n, scales[S5][E], QUARTER);
+	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
+	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S4][B], QUARTER_DOT);
+	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S5][D], QUARTER);
+	easybuzz_add_note(&n, scales[S5][E], QUARTER);
+
+	easybuzz_add_note(&n, scales[S5][C], QUARTER);
+	easybuzz_add_note(&n, scales[S4][A], EIGHTH);
+	easybuzz_add_note(&n, rest,			 EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S4][A], HALF);
+	
+	
+	
+	easybuzz_add_note(&n, rest,			 EIGHTH);
+	easybuzz_add_note(&n, scales[S5][D], QUARTER);
+	easybuzz_add_note(&n, scales[S4][F], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S5][A], QUARTER);
+	easybuzz_add_note(&n, scales[S5][G], EIGHTH);
+	easybuzz_add_note(&n, scales[S5][F], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S5][E], QUARTER_DOT);
+	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S5][E], QUARTER);
+	easybuzz_add_note(&n, scales[S5][D], EIGHTH);
+	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S4][B], QUARTER);
+	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
+	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S5][D], QUARTER);
+	easybuzz_add_note(&n, scales[S5][E], QUARTER);
+	
+	easybuzz_add_note(&n, scales[S5][C], QUARTER);
+	easybuzz_add_note(&n, scales[S4][A], EIGHTH);
+	easybuzz_add_note(&n, rest,			 EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S4][A], HALF);
 	songs[s].first_note = n;
 }
 
