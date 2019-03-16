@@ -23,7 +23,7 @@ void DrawScore(int score)
 {
 	//TODO: Use 7 segment display
 //	printf("Score: %i\n", score);    
-	writeLedScore(score);
+	SegDisplay_writeLedScore(score);
 }
 
 void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player)

@@ -5,36 +5,51 @@
  * Author : Daan, Ian, Max
  */ 
 
+#define F_CPU 8000000L
+
 #include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
 
 #include "hardware/EasyBuzz.h"
 #include "hardware/DotMatrix.h"
 #include "hardware/SegDisplay.h"
 #include "hardware/Button.h"
+#include "hardware/lcd.h"
 
 #include "util/Random.h"
 
 #include "game/StateManager.h"
 #include "game/Menu.h"
+#include "game/Draw.h"
 
-#define F_CPU 8000000L
+
 
 int main(void)
 {	
 	//Hardware
 	SegDisplay_Init();
-	Button_Init();
 	matrix_init();
+	Button_Init();
+	lcd_init();
 	
+	lcd_write_line1("Tetris          ");
+	lcd_write_line2("Press x to play ");
+		
 	//Util
 	InitRandom();
-	
+		
 	//Game
 	InitStateManager();
     InitMenu();
+	
 		
-    /* Replace with your application code */
-    while (1) 
+		
+	
+    /* Replace with your application code */	    
+	while (1) 
     {
     }
+	
+	
 }

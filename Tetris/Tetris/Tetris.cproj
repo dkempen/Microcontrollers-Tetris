@@ -234,6 +234,12 @@
     <Compile Include="hardware\EasyBuzz.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="hardware\lcd.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="hardware\lcd.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="hardware\SegDisplay.c">
       <SubType>compile</SubType>
     </Compile>
