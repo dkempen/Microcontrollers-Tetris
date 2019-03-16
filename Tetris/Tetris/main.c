@@ -33,6 +33,7 @@ int main(void)
 	lcd_clear();
 	lcd_set_cursor(0);
 	lcd_write_data('a');
+	
     /* Replace with your application code */
 	
     while (1) 

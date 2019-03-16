@@ -5,6 +5,8 @@
  *  Author: Max van Noordennen
  */ 
 
+#define F_CPU 8000000L
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -14,12 +16,18 @@
 #define LCD_E 	3
 #define LCD_RS	2
 
+static unsigned char charset[] =
+{
+	0x1D, 0x05, 0x05, 0x1F, 0x14, 0x14, 0x17, 0x00,
+	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+
 void lcd_strobe_lcd_e(void)
 {
 	PORTC |= (1<<LCD_E);	// E high
-	_delay_ms(1);		
+	_delay_ms(1);			// nodig
 	PORTC &= ~(1<<LCD_E);  	// E low
-	_delay_ms(1);		
+	_delay_ms(1);			// nodig?
 }
 
 void lcd_init(void)
@@ -28,18 +36,19 @@ void lcd_init(void)
 	DDRC = 0xFF;
 	PORTC = 0x00;
 
-	
-	
+	// Step 3 (table 12)
 	PORTC = 0x20;   // function set
 	lcd_strobe_lcd_e();
 	PORTC = 0x80;
 	lcd_strobe_lcd_e();
 
+	// Step 4 (table 12)
 	PORTC = 0x00;   // Display on/off control
 	lcd_strobe_lcd_e();
 	PORTC = 0xF0;
 	lcd_strobe_lcd_e();
 
+	// Step 4 (table 12)
 	PORTC = 0x00;   // Entry mode set
 	lcd_strobe_lcd_e();
 	PORTC = 0x60;
@@ -48,17 +57,13 @@ void lcd_init(void)
 	lcd_clear();
 }
 
-void lcd_writechar(unsigned char byte)
+void lcd_clear()
 {
-	// First nibble.
-	PORTC = byte;
-	PORTC |= (1<<LCD_RS);
+	PORTC = 0x00;
 	lcd_strobe_lcd_e();
-
-	// Second nibble
-	PORTC = (byte<<4);
-	PORTC |= (1<<LCD_RS);
+	PORTC = 0x10;
 	lcd_strobe_lcd_e();
+	lcd_fillCGrom(charset);
 }
 
 void lcd_write_data(unsigned char byte)
@@ -72,33 +77,6 @@ void lcd_write_data(unsigned char byte)
 	PORTC = (byte<<4);
 	PORTC |= (1<<LCD_RS);
 	lcd_strobe_lcd_e();
-}
-
-void lcd_write_firstline(char* string)
-{
-	int i = 0;
-	lcd_set_cursor(0);
-	for (i = 0; string[i] != '\0'; i++)
-	{
-		lcd_writechar(string[i]);
-	}
-		
-}
-
-void lcd_write_string(char *str)
-{
-	for(;*str; str++)
-		lcd_writechar(*str);
-}
-
-void lcd_write_secondline(char* string)
-{
-	int i = 0;
-	lcd_set_cursor(16);
-	for (i = 0; string[i] != '\0'; i++)
-	{
-		lcd_writechar(string[i]);
-	}
 }
 
 void lcd_write_command(unsigned char byte)
@@ -122,11 +100,11 @@ void lcd_set_cursor(int position)
 	lcd_write_command(position + 192 - 16);
 }
 
-void lcd_clear()
+void lcd_fillCGrom(unsigned char* charmap)
 {
-	PORTC = 0x00;
-	lcd_strobe_lcd_e();
-	PORTC = 0x10;
-	lcd_strobe_lcd_e();
+	lcd_write_command(0x40); // adres 0 van CG-RAM
+	unsigned int sz =  sizeof(charmap) / sizeof(char);
+	for (int ch = 0; ch < sz ; ch++)
+	lcd_write_data(charmap[ch]); // schrijf data in CG-RAM
 }
 
