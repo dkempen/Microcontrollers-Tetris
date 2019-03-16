@@ -52,10 +52,11 @@
 #define B	11
 
 // Scales (as in the placement in the array)
-#define S4	0
-#define S5	1
-#define S6	2
-#define S7	3
+#define S3	0
+#define S4	1
+#define S5	2
+#define S6	3
+#define S7	4
 
 // Note struct is defined in the header for access by the LinkedList
 
@@ -69,6 +70,7 @@ typedef struct
 // This 2d array holds the tone frequencies for each note in lists of scales
 int scales[SCALE_COUNT][SCALE_LENGTH] =
 { // C	  Cs   D	Ds	 E	  F	   Fs	G	 Gs	  A	   As	B
+	{131, 139, 147, 156, 165, 175, 185, 196, 208, 220, 233, 247 },	// Scale 3
 	{262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494 },	// Scale 4
 	{523, 554, 587, 622, 659, 698, 740, 784, 831, 880, 932, 988 },	// Scale 5
 	{1046,1108,1174,1244,1318,1397,1480,1568,1662,1760,1865,1975},	// Scale 6
@@ -121,6 +123,7 @@ void easybuzz_init_songs(void)
 	node *n;
 
 	// Test (octave)
+	#pragma region
 	easybuzz_init_song(&s, &n, 200);
 	easybuzz_add_note(&n, scales[S4][C], QUARTER);
 	easybuzz_add_note(&n, scales[S4][D], QUARTER);
@@ -131,8 +134,10 @@ void easybuzz_init_songs(void)
 	easybuzz_add_note(&n, scales[S4][B], QUARTER);
 	easybuzz_add_note(&n, scales[S5][C], QUARTER);
 	songs[s].first_note = n;
+	#pragma endregion
 
 	// Tetris Theme
+	#pragma region 
 	easybuzz_init_song(&s, &n, 150);
 	easybuzz_add_note(&n, scales[S5][E], QUARTER);
 	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
@@ -191,6 +196,7 @@ void easybuzz_init_songs(void)
 	
 	easybuzz_add_note(&n, scales[S4][A], HALF);
 	songs[s].first_note = n;
+	#pragma endregion
 }
 
 // Plays a song from the songlist (given an index). Blocking for now, to be updated...
