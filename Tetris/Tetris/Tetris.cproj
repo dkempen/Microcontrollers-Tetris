@@ -237,6 +237,12 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="util\Random.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="util\Random.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="util\LinkedList.c">
       <SubType>compile</SubType>
     </Compile>

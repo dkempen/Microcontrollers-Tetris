@@ -11,6 +11,7 @@
 #include "Blocks.h"
 #include "Game.h"
 #include "InputHandler.h"
+#include "Matrix.h"
 
 Player player;
 

@@ -7,6 +7,8 @@
 
 #include <stdlib.h>
 
+#include "../util/Random.h"
+
 #include "InputHandler.h"
 
 
@@ -31,11 +33,11 @@ void CheckForInput(void)
 	currentInput = IDLE;
 }
 
-void AiInput(int seed)
+void AiInput(void)
 {
-	srand(seed);
+	//srand(seed);
 	//srand(time(NULL)); Atmel doesn't seem to accept time(NULL), so this doesn't work
-	int num = (rand() * 6) % 6;
+	int num = (GetSeed()) % 6;
 
 	if (num == 0)
 	currentInput = MOVE_LEFT;

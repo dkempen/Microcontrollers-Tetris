@@ -11,6 +11,8 @@
 #include "hardware/DotMatrix.h"
 #include "hardware/SegDisplay.h"
 
+#include "util/Random.h"
+
 #include "game/StateManager.h"
 #include "game/Menu.h"
 
@@ -18,8 +20,13 @@
 
 int main(void)
 {	
+	//Hardware
 	SegDisplay_Init();
 	
+	//Util
+	InitRandom();
+	
+	//Game
 	matrix_init();
     InitStateManager();
     InitMenu();
