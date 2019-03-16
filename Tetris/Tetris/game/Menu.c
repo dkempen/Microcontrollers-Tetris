@@ -28,10 +28,7 @@ void RunMenu(void)
 		
 		//Easybuzz
 		_delay_ms(1);
-		
-		
-		//system("cls"); For clearing command prompt, not needed in BIGAVR
-
+				
 		DrawMenu();
 
 		char input = Button_GetInput(); //TODO: Replace with keys from BIGAVR
