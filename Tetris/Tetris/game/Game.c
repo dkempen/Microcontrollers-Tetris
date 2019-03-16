@@ -85,10 +85,7 @@ void SpawnNewBlock(void)
 {
 	CheckForFullRow();
 
-	//srand(millisCounter);
-	//int num = (rand()) % 7;
-
-	InitPlayer(3, 0, GetSeed() % 8);
+	InitPlayer(3, 0, GetSeed() % 7);
 	
 	//If the newly spawned player block is overlapping with the blocks filling the field
 	// then set the state to GameOver
