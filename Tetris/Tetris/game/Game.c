@@ -55,7 +55,7 @@ void RunGame(void)
 			millisCounter += 1;
 		}
 		
-		if(millisCounter % 100 != 0){
+		if(millisCounter % 200 != 0){
 			continue;
 		}
 		

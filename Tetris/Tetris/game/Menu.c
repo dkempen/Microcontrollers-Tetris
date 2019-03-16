@@ -5,6 +5,10 @@
  *  Author: Aspire V3-772G-747a8
  */ 
 
+#include <util/delay.h>
+
+#include "../hardware/Button.h"
+
 #include "Menu.h"
 #include "StateManager.h"
 #include "Game.h"
@@ -22,17 +26,21 @@ void RunMenu(void)
 {
 	while (GetState() == STATE_MENU) {
 		
+		//Easybuzz
+		_delay_ms(1);
+		
+		
 		//system("cls"); For clearing command prompt, not needed in BIGAVR
 
 		DrawMenu();
 
-		char input = 'w'; //TODO: Replace with keys from BIGAVR
+		char input = Button_GetInput(); //TODO: Replace with keys from BIGAVR
 
-		if (input == 'w')
+		if (input == 'a')
 		SetState(STATE_GAME);
-		else if (input == 'x')
-		SetState(STATE_HIGHSCORES);
 		else if (input == 's')
+		SetState(STATE_HIGHSCORES);
+		else if (input == 'd')
 		SetState(STATE_EXIT);
 
 	}

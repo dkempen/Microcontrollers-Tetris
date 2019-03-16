@@ -17,7 +17,7 @@
 void Button_Init(void)
 {
 	DDRC = 0b00000000;
-	DDRD = 0b00000000;
+	DDRC = 0b00000000;
 } 
 
 char Button_GetInput(void)
