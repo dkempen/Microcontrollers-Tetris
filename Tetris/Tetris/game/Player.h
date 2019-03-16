@@ -24,8 +24,6 @@ void UpdatePlayer(void);
 /*
 The player block moves down at a constant rate
 No matter the input, this rate of dropping is maintained
-
-@param seed - The value for seeding the block spawner
 */
 void MoveDown(void);
 
