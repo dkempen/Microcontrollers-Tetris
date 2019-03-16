@@ -15,13 +15,15 @@
 // Struct that holds a note (frequency and length)
 typedef struct
 {
-	double frequency;	// It's a pointer because it needs to get the value from the constant scales array
-	double length;	// length is defined as a multiplier value based on the length of a quarter note as value 1
+	double frequency;	// The frequency in ms of the note
+	double length;		// length is defined as a multiplier value based on the length of a quarter note as value 1
 } note_struct;
 
 void easybuzz_init(void);
-void easybuzz_test(void);
+void easybuzz_update(void);
+void easybuzz_play_loop(int);
+void easybuzz_stop_loop(void);
 void easybuzz_play(int);
-void easybuzz_stop(void);
+void easybuzz_test(void);
 
 #endif /* EASYBUZZ_H_ */

@@ -22,7 +22,7 @@
 #define SONG_COUNT		2
 
 #define SCALE_LENGTH	12
-#define SCALE_COUNT		4
+#define SCALE_COUNT		5
 
 // Note lengths
 #define FULL			4.0
@@ -105,16 +105,14 @@ void easybuzz_pwm_off(void);
 // Initializes the hardware and songs for the EasyBuzz (called once at startup)
 void easybuzz_init()
 {
-	// TODO: init hardware
 	stop_command = 0;
 	easybuzz_pwm_init();
 	easybuzz_init_songs();
 }
 
-void easybuzz_test()
+void easybuzz_update()
 {
-	easybuzz_init();
-	easybuzz_play(SONG_TETRIS);
+	// TODO: update logic
 }
 
 void easybuzz_init_songs(void)
@@ -199,11 +197,22 @@ void easybuzz_init_songs(void)
 	#pragma endregion
 }
 
-// Plays a song from the songlist (given an index). Blocking for now, to be updated...
+// Inits a song to play on loop
+void easybuzz_play_loop(int song_index)
+{
+	// TODO: loop logic
+}
+
+// Stops the loop (sound effects still get played)
+void easybuzz_stop_loop()
+{
+	// TODO: stop logic
+}
+
+// Plays a song from the songlist (given an index)
 void easybuzz_play(int song_index)
 {
-	// TODO: add a song queue
-	// TODO: place this in a thread and check first if there is already a song playing
+	// TODO: make this non blocking
 
 	stop_command = 0;
 	node *current_node = songs[song_index].first_note;
@@ -211,7 +220,6 @@ void easybuzz_play(int song_index)
 
 	while (1)
 	{
-		// TODO: check if the same can be achieved with thread library logic
 		// If the stop command has been given (1), stop playing and set the command to 0 again
 		if (stop_command != 0)
 		{
@@ -229,11 +237,10 @@ void easybuzz_play(int song_index)
 	}
 }
 
-// Stops the current playing song (after a note is completed)
-void easybuzz_stop()
+void easybuzz_test()
 {
-	// TODO: check if the same can be achieved with thread library logic
-	stop_command = 1;
+	easybuzz_init();
+	easybuzz_play(SONG_TETRIS);
 }
 #pragma endregion main_fuctions
 
@@ -241,6 +248,7 @@ void easybuzz_stop()
 // Plays a given note (blocking) and waits in the case of a rest
 void easybuzz_play_note(note_struct note, int bpm)
 {
+	// TODO: make this non blocking
 	// If the note is a rest, just wait the length of the note
 	if (note.frequency == 0)
 	{
@@ -299,9 +307,9 @@ void easybuzz_pwm_init()
 void easybuzz_pwm_set_frequency(int frequency)
 {
 	TCCR1B |= (1 << CS11);		// Turn on the 8 times prescaler (which starts the timer)
-	int ms = (int)(1.0 / frequency * 1000000.0);
-	ICR1	= ms;		// TOP value for counter
-	OCR1A	= ms / 2;	// compare value in between
+	int ms = (int)(1.0 / frequency * 1000000.0); // Convert hertz to microseconds
+	ICR1	= ms;				// TOP value for counter
+	OCR1A	= ms / 2;			// compare value in between
 }
 
 void easybuzz_pwm_off()
