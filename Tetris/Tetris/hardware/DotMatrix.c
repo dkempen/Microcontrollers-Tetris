@@ -81,7 +81,7 @@ void matrix_clear_display(int address)
 		draw_row(address, y, 0);
 }
 
-/* Draws the game field to both of the maxtrix displays (D0 is the top display, D1 is the bottom display)
+/* Draws the game field to both of the matrix displays (D0 is the top display, D1 is the bottom display)
  * Field must consist of 0 (off) and 1 (on), and must be constructed like this: field[x][y] (without exceeding the size constraints) */
 void matrix_draw_game_field(int field[FIELD_WIDTH][FIELD_HEIGHT])
 {
@@ -95,7 +95,7 @@ void matrix_draw_game_field(int field[FIELD_WIDTH][FIELD_HEIGHT])
 		// Create data for an entire row by looping through the array
 		data = 0;
 		for (x = 0; x < FIELD_WIDTH; x++)
-			data += field[x][y] * (FIELD_WIDTH - x);
+			data |= (1 * field[x][y]) << x;
 		
 		// Draw the row to the corresponding display
 		if (y < 8)

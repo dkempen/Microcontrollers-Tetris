@@ -11,7 +11,8 @@
 
 //void Button_checkinput();
 
-
+void Button_Init(void);
+char Button_GetInput(void);
 
 
 #endif /* BUTTON_H_ */

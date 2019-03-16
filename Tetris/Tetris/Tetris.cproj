@@ -243,9 +243,22 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="util\Random.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="util\Random.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="util\LinkedList.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="util\LinkedList.h">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="game" />
+    <Folder Include="util" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="hardware" />

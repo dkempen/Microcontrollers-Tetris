@@ -26,7 +26,7 @@ void RunMenu(void)
 
 		DrawMenu();
 
-		char input = 'a'; //TODO: Replace with keys from BIGAVR
+		char input = 'w'; //TODO: Replace with keys from BIGAVR
 
 		if (input == 'w')
 		SetState(STATE_GAME);

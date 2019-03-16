@@ -7,48 +7,34 @@
 
 #include <avr/io.h>
 #include "../hardware/Button.h"
-#include "../hardware/SegDisplay.h"
 
-typedef enum {NOTHING,BUTTON_LEFT, BUTTON_RIGHT}Buttons;
+#define BUTTON_MOVE_LEFT 0x80  //PINC
+#define BUTTON_MOVE_RIGHT 0x60 //PINC
+#define BUTTON_MOVE_DOWN 0x70  //PINC
+#define BUTTON_TURN_LEFT 0x80  //PIND
+#define BUTTON_TURN_RIGHT 0x60 //PIND
 
-//void Button_checkinput()
-//{
-	//DDRC = 0b00000000;
-	//DDRB = 0b00000000;
-	//DDRD = 0b11111111;
-	//
-	//
-	//
-	//int counter = 0;
-	//while (1)
-	//{
-		//if((PINC & (1<<5)) > 0 ) {//if PIN5 of port C is high
-		//counter++;
-		//writeLedScore(counter);
-	//}	
-	//else if((PINC3 & 1<<3) > 0) 
-	//{
-		//counter--;
-		//writeLedScore(counter);
-	//}
-	//PORTD = 0b00100000;
-	//}
-//}
-
-
-void Button_initports()
+void Button_Init(void)
 {
 	DDRC = 0b00000000;
+	DDRD = 0b00000000;
 } 
 
-unsigned char button_state()
+char Button_GetInput(void)
 {
-	if (!(PINC & (1<<5)))
-	{
-		_delay_ms(25);
-		if (!(PINC & (1<<5))) return 1;
-	}
-	return 0;
+	if ((PINC & BUTTON_MOVE_LEFT))	
+		return 'a';		
+	else if ((PINC & BUTTON_MOVE_RIGHT))
+		return 'd';
+	else if ((PINC & BUTTON_MOVE_DOWN))
+		return 's';
+	else if ((PIND & BUTTON_TURN_LEFT))
+		return 'q';
+	else if ((PIND & BUTTON_TURN_RIGHT))
+		return 'e';
+	else
+		return 'w';	
+	
 }
 
 

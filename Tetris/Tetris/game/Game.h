@@ -18,6 +18,7 @@ void InitGame(void);
 
 void RunGame(void);
 
+
 /*
 Spawns a new, random block
 */
