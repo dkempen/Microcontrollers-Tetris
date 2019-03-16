@@ -48,35 +48,8 @@ void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player)
 		}
 	}
 
-/*
-	int field22[FIELD_WIDTH][FIELD_LENGTH] =	   
-	                   {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-						{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}};
-*/
 	matrix_draw_game_field(tempField);
-
-	/*
-	//Draw the field
-	for (int y = 0; y < FIELD_LENGTH; y++) {
-		for (int x = 0; x < FIELD_WIDTH; x++) {
-
-			//Mark tiles that are the bottom, or occupied by previously placed blocks
-			if (tempField[x][y] == 1)
-			printf("x");
-
-			//The rest of the field does not get marked
-			else
-			printf(" ");
-		}
-		printf("\n");
-	}
-	*/
+	
 }
 
 void DrawGameOverScreen(int score, int isHighScore)

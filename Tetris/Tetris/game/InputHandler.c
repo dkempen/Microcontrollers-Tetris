@@ -8,8 +8,10 @@
 #include <stdlib.h>
 
 #include "../util/Random.h"
+#include "../hardware/Button.h"
 
 #include "InputHandler.h"
+
 
 
 int currentInput = IDLE;
@@ -17,7 +19,7 @@ int currentInput = IDLE;
 
 void CheckForInput(void)
 {
-	char input = 'w'; //TODO: Replace with keys from BigAVR
+	char input = Button_GetInput();//'w'; //TODO: Replace with keys from BigAVR
 
 	if (input == 'a')
 	currentInput = MOVE_LEFT;

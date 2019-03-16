@@ -55,15 +55,15 @@ void RunGame(void)
 			millisCounter += 1;
 		}
 		
-		if(millisCounter % 250 != 0){
+		if(millisCounter % 100 != 0){
 			continue;
 		}
 		
 		DrawScore(GetScore());
 		DrawField(GetField(), GetPlayer());
 
-		//CheckForInput();
-		AiInput();
+		CheckForInput();
+		//AiInput();
 		UpdatePlayer();
 
 		if (millisCounter >= 1000)
