@@ -36,6 +36,10 @@ void lcd_init(void)
 	DDRC = 0xFF;
 	PORTC = 0x00;
 
+	// Step 2 (table 12)
+	//PORTC = 0x20;	// function set
+	//lcd_strobe_lcd_e();
+
 	// Step 3 (table 12)
 	PORTC = 0x20;   // function set
 	lcd_strobe_lcd_e();
@@ -66,6 +70,24 @@ void lcd_clear()
 	lcd_fillCGrom(charset);
 }
 
+void lcd_write_string(char *str)
+{
+	//Loop for 16 characters
+	int i = 0;
+	for(;i < 16; i++)
+	lcd_write_data(*(str + i));
+}
+
+void lcd_write_line1(char *str){
+	lcd_set_cursor(0);
+	lcd_write_string(str);
+}
+
+void lcd_write_line2(char *str){
+	lcd_set_cursor(16);
+	lcd_write_string(str);
+}
+
 void lcd_write_data(unsigned char byte)
 {
 	// First nibble.
@@ -77,6 +99,7 @@ void lcd_write_data(unsigned char byte)
 	PORTC = (byte<<4);
 	PORTC |= (1<<LCD_RS);
 	lcd_strobe_lcd_e();
+	
 }
 
 void lcd_write_command(unsigned char byte)
@@ -108,22 +131,3 @@ void lcd_fillCGrom(unsigned char* charmap)
 	lcd_write_data(charmap[ch]); // schrijf data in CG-RAM
 }
 
-void lcd_write_firstline(char* string)
-{
-	int i = 0;
-	lcd_set_cursor(0);
-	for (i = 0; string[i] != '\0'; i++)
-	{
-		lcd_write_data(string[i]);
-	}
-}
-
-void lcd_write_secondline(char* string)
-{
-	int i = 0;
-	lcd_set_cursor(16);
-	for (i = 0; string[i] != '\0'; i++)
-	{
-		lcd_write_data(string[i]);
-	}
-}

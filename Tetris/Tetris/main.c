@@ -27,25 +27,27 @@
 int main(void)
 {	
 	//Hardware
-	//SegDisplay_Init();
-	
-	//Util
-	//InitRandom();
-	
+	SegDisplay_Init();
 	lcd_init();
-	lcd_clear();
-	lcd_set_cursor(0);
-	lcd_write_firstline("tetris");
+	matrix_init();
 	
+	lcd_write_line1("Tetris          ");
+	lcd_write_line2("Press x to play ");
+		
+	//Util
+	InitRandom();
+		
 	//Game
-	//matrix_init();
-    //InitStateManager();
-    //InitMenu();
+	InitStateManager();
+    InitMenu();
+	
+		
 		
 	
-    /* Replace with your application code */
-	
-    while (1) 
+    /* Replace with your application code */	    
+	while (1) 
     {
     }
+	
+	
 }
