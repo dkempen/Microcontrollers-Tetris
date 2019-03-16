@@ -35,7 +35,7 @@ int main(void)
 	lcd_init();
 	lcd_clear();
 	lcd_set_cursor(0);
-	lcd_write_data('a');
+	lcd_write_firstline("tetris");
 	
 	//Game
 	//matrix_init();

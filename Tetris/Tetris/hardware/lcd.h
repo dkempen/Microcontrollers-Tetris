@@ -17,9 +17,8 @@ void lcd_write_firstline(char* string);
 void lcd_set_cursor(int position);
 void lcd_init(void);
 void lcd_write_command(unsigned char byte);
-void lcd_write_string(char *str);
 void lcd_write_data(unsigned char byte);
-
+void lcd_fillCGrom(unsigned char* charmap);
 
 
 

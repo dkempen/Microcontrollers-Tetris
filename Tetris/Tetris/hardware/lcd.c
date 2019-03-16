@@ -108,3 +108,22 @@ void lcd_fillCGrom(unsigned char* charmap)
 	lcd_write_data(charmap[ch]); // schrijf data in CG-RAM
 }
 
+void lcd_write_firstline(char* string)
+{
+	int i = 0;
+	lcd_set_cursor(0);
+	for (i = 0; string[i] != '\0'; i++)
+	{
+		lcd_write_data(string[i]);
+	}
+}
+
+void lcd_write_secondline(char* string)
+{
+	int i = 0;
+	lcd_set_cursor(16);
+	for (i = 0; string[i] != '\0'; i++)
+	{
+		lcd_write_data(string[i]);
+	}
+}
