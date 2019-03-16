@@ -11,7 +11,7 @@
 
 #include "Player.h"
 
-#define FIELD_WIDTH 10
+#define FIELD_WIDTH 8
 #define FIELD_LENGTH 16
 
 void InitField(void);

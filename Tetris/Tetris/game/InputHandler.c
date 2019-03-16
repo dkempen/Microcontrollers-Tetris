@@ -5,6 +5,10 @@
  *  Author: Aspire V3-772G-747a8
  */ 
 
+#include <stdlib.h>
+
+#include "../util/Random.h"
+
 #include "InputHandler.h"
 
 
@@ -13,7 +17,7 @@ int currentInput = IDLE;
 
 void CheckForInput(void)
 {
-	char input = 'a'; //TODO: Replace with keys from BigAVR
+	char input = 'w'; //TODO: Replace with keys from BigAVR
 
 	if (input == 'a')
 	currentInput = MOVE_LEFT;
@@ -31,8 +35,9 @@ void CheckForInput(void)
 
 void AiInput(void)
 {
+	//srand(seed);
 	//srand(time(NULL)); Atmel doesn't seem to accept time(NULL), so this doesn't work
-	int num = 0;//rand() % 6;
+	int num = (GetSeed()) % 6;
 
 	if (num == 0)
 	currentInput = MOVE_LEFT;

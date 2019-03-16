@@ -159,21 +159,21 @@ void SegDisplay_writeLedDisplay(int value)
 	if (value < 0)
 	{
 		int absonum = abs(value);
-		spi_writeWord(0x01,absonum%10);
-		spi_writeWord(0x02,(absonum/10)%10);
-		spi_writeWord(0x03,(absonum/100)%10);
-		spi_writeWord(0x04,0x0A);
+		SegDisplay_writeWord(0x01,absonum%10);
+		SegDisplay_writeWord(0x02,(absonum/10)%10);
+		SegDisplay_writeWord(0x03,(absonum/100)%10);
+		SegDisplay_writeWord(0x04,0x0A);
 	} else // positive number
 	{
-		spi_writeWord(0x01,value%10);
-		spi_writeWord(0x02,(value/10)%10);
-		spi_writeWord(0x03,(value/100)%10);
-		spi_writeWord(0x04,(value/1000)%10);
+		SegDisplay_writeWord(0x01,value%10);
+		SegDisplay_writeWord(0x02,(value/10)%10);
+		SegDisplay_writeWord(0x03,(value/100)%10);
+		SegDisplay_writeWord(0x04,(value/1000)%10);
 	}
 	
 }
 
 void SegDisplay_writeLedScore(int score)
 {
-	writeLedDisplay(score);
+	SegDisplay_writeLedDisplay(score);
 }	
