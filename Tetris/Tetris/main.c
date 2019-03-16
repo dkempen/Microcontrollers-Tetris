@@ -24,13 +24,13 @@ int main(void)
 	//Hardware
 	SegDisplay_Init();
 	Button_Init();
+	matrix_init();
 	
 	//Util
 	InitRandom();
 	
 	//Game
-	matrix_init();
-    InitStateManager();
+	InitStateManager();
     InitMenu();
 		
     /* Replace with your application code */
