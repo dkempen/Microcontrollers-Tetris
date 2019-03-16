@@ -16,51 +16,55 @@
 #define LCD_E 	3
 #define LCD_RS	2
 
+// used for custom chars
 static unsigned char charset[] =
 {
-	0x1D, 0x05, 0x05, 0x1F, 0x14, 0x14, 0x17, 0x00,
-	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+	
 };
 
 void lcd_strobe_lcd_e(void)
 {
-	PORTC |= (1<<LCD_E);	// E high
-	_delay_ms(1);			// nodig
-	PORTC &= ~(1<<LCD_E);  	// E low
-	_delay_ms(1);			// nodig?
+	PORTC |= (1<<LCD_E);	// Enable high
+	_delay_ms(1);			
+	PORTC &= ~(1<<LCD_E);  	// Enable low
+	_delay_ms(1);			
 }
 
 void lcd_init(void)
 {
-	// PORTC output mode and all low (also E and RS pin)
+	// PORTC output mode and all low, as well as Enable pin and Register select pin
 	DDRC = 0xFF;
 	PORTC = 0x00;
-
-	// Step 2 (table 12)
-	//PORTC = 0x20;	// function set
-	//lcd_strobe_lcd_e();
-
-	// Step 3 (table 12)
+	
+	// Sets Data length, number of display lines and character font
 	PORTC = 0x20;   // function set
+					// Data is sent or received in 4 bit length
+					// Sets numbers of lines to 2
+					// Font is set to 5x 7 dots
 	lcd_strobe_lcd_e();
-	PORTC = 0x80;
+	PORTC = 0x80;						
 	lcd_strobe_lcd_e();
-
-	// Step 4 (table 12)
+	
+	// Controls display of characters and cursor
 	PORTC = 0x00;   // Display on/off control
 	lcd_strobe_lcd_e();
-	PORTC = 0xF0;
+	PORTC = 0xF0;	// The display is on
+					// The cursor is displayed
+					// The character at the cursor position blinks
 	lcd_strobe_lcd_e();
-
-	// Step 4 (table 12)
+	
+	// Sets the cursor move direction and specify to shift or not shift the display
 	PORTC = 0x00;   // Entry mode set
 	lcd_strobe_lcd_e();
-	PORTC = 0x60;
+	PORTC = 0x60;	// Specifies the increment 1 = incement 0 = derement
+					// The display will be shifted to left when 1 en increment is 1,
+					// if decrement then it will shift to the right
 	lcd_strobe_lcd_e();
 	
 	lcd_clear();
 }
 
+// Clears the display
 void lcd_clear()
 {
 	PORTC = 0x00;
