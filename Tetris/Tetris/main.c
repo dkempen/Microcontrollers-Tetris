@@ -33,8 +33,6 @@ int main(void)
 	Button_Init();
 	lcd_init();
 	
-	lcd_write_line1("Tetris          ");
-	lcd_write_line2("Press x to play ");
 		
 	//Util
 	InitRandom();

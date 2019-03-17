@@ -5,6 +5,10 @@
  *  Author: Aspire V3-772G-747a8
  */ 
 
+#include <avr/delay.h>
+
+#include "../hardware/Button.h"
+
 #include "StateManager.h"
 #include "GameOver.h"
 #include "Game.h"
@@ -20,17 +24,17 @@ void InitGameOver(void)
 
 void RunGameOver(void)
 {
+	//Prevents key presses in another screen from affecting the current screen
+	_delay_ms(1000);
+	
 	while (GetState() == STATE_GAMEOVER)
 	{
-		//system("cls"); For clearing command prompt, not needed in BIGAVR
 
 		DrawGameOverScreen(GetScore(), IsHighScore());
 
-		char input = 'a'; //TODO: Remove with keys from BIGAVR
+		char input = Button_GetInput();
 
-		if (input == 'a')
-		SetState(STATE_GAME);
-		else if (input == 'd')
+		if (input == 's')
 		SetState(STATE_MENU);
 	}
 
