@@ -5,7 +5,7 @@
  *  Author: Aspire V3-772G-747a8
  */ 
 
-#include <util/delay.h>
+#include <avr/delay.h>
 
 #include "../hardware/Button.h"
 
@@ -23,7 +23,10 @@ void InitMenu(void)
 }
 
 void RunMenu(void)
-{
+{	
+	//Prevents key presses in another screen from affecting the current screen
+	_delay_ms(1000);
+	
 	while (GetState() == STATE_MENU) {
 		
 		//Easybuzz
@@ -31,14 +34,14 @@ void RunMenu(void)
 				
 		DrawMenu();
 
-		char input = Button_GetInput(); //TODO: Replace with keys from BIGAVR
+		char input = Button_GetInput(); 
 
-		if (input == 'a')
+		if (input == 'd')
 		SetState(STATE_GAME);
 		else if (input == 's')
 		SetState(STATE_HIGHSCORES);
-		else if (input == 'd')
-		SetState(STATE_EXIT);
+	//	else if (input == 'a')
+	//	SetState(STATE_EXIT);
 
 	}
 

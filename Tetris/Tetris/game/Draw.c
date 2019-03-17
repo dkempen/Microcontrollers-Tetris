@@ -5,30 +5,30 @@
  *  Author: Aspire V3-772G-747a8
  */ 
 
-#include "Draw.h"
+#include <stdio.h>
+#include <string.h>
+
 #include "../hardware/DotMatrix.h"
 #include "../hardware/SegDisplay.h"
-#include <stdio.h>
+#include "../hardware/lcd.h"
+
+#include "Draw.h"
 
 void DrawMenu(void)
 {
-	//TODO: Use lcd display
-	
-//	printf("Tetris\n\n");
-//	printf("Press w to play, press s to exit\n\n");
-//	printf("Press x to view the highscores\n");
+	lcd_set_cursor(0);
+	lcd_write_string("Tetris    play >");
+	lcd_set_cursor(16);
+	lcd_write_string("        scores v");
 }
 
 void DrawScore(int score)
-{
-	//TODO: Use 7 segment display
-//	printf("Score: %i\n", score);    
+{		
 	SegDisplay_writeLedScore(score);
 }
 
 void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player)
 {
-	//TODO: Use dotmatrix display
 	
 	int tempField[FIELD_WIDTH][FIELD_LENGTH];
 
@@ -54,28 +54,48 @@ void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player)
 
 void DrawGameOverScreen(int score, int isHighScore)
 {
-	//TODO: Use lcd display
+	lcd_set_cursor(0);
 	
-//	printf("Game Over!\n\n");
-
-//	printf("Your score: %i\n\n", score);
-
+	char line1[16];
+	sprintf(line1, "Your score: %04i", score);
+	
+	lcd_write_string(line1);
+	lcd_set_cursor(16);
+	lcd_write_string("v menu          ");
+	
 	if (isHighScore == 0){
-//	printf("New Highscore!\n\n");
-	}
-	
-//	printf("Press a to go again, press d to return to menu\n\n");
+		lcd_set_cursor(16);
+		lcd_write_string("v menu   new HS!");
+	}	
 }
 
-void DrawHighScoresScreen(int * highscores, int amount)
+void DrawHighScoresScreen(int * highscores, int currentScore)
 {
-	//TODO: Use lcd display
 	
-//	printf("High Scores\n\n");
+	lcd_set_cursor(0);
+	lcd_write_string("Scores    menu v");
+	lcd_set_cursor(16);
+	
+	
+	char line2[16];
+	sprintf(line2, "  %i. %04i >     ",currentScore+1,highscores[currentScore]);
+		
+	lcd_write_string(line2);	
+}
 
-	for (int i = 0; i < amount; i++) {
-	//	printf("%i. %i\n", (i + 1), highscores[i]);
-	}
+void DrawReadyScreen(){
+	
+	lcd_set_cursor(0);
+	lcd_write_string("  Get ready...  ");
+	lcd_set_cursor(16);
+	lcd_write_string("                ");
+	
+}
 
-//	printf("\nPress z to return to the menu screen\n");
+void DrawGoScreen(){
+
+	lcd_set_cursor(0);
+	lcd_write_string("      Go!       ");
+	lcd_set_cursor(16);
+	lcd_write_string("                ");	
 }

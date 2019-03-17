@@ -5,6 +5,10 @@
  *  Author: Aspire V3-772G-747a8
  */ 
 
+#include <avr/delay.h>
+
+#include "../hardware/Button.h"
+
 #include "StateManager.h"
 #include "HighScoresScreen.h"
 #include "Menu.h"
@@ -12,27 +16,34 @@
 #include "Draw.h"
 #include "Score.h"
 
+int currentElement;
+
 void InitHighScoresScreen(void)
 {
+	currentElement = 0;
 	RunHighScoresScreen();
 }
 
 void RunHighScoresScreen(void)
 {
+	
+	//Prevents key presses in another screen from affecting the current screen
+	_delay_ms(1000);
 
 	while (GetState() == STATE_HIGHSCORES) {
 
-		//system("cls"); For clearing command prompt, not needed in BIGAVR
 
-		DrawHighScoresScreen(GetHighScores(), MAX_AMOUNT_OF_HIGHSCORES);
+		DrawHighScoresScreen(GetHighScores(), currentElement);
 
+		char input = Button_GetInput();
 
-
-		char input = 'a'; //TODO: Replace with keys from BIGAVR
-
-		if (input == 'z')
-		SetState(STATE_MENU);
-
+		if (input == 's')
+			SetState(STATE_MENU);
+		if (input == 'd'){
+			currentElement ++;	
+			if(currentElement >= MAX_AMOUNT_OF_HIGHSCORES)
+				currentElement = 0;			
+		}
 	}
 
 	if (GetState() == STATE_MENU)
