@@ -38,6 +38,9 @@ void lcd_init(void)
 	DDRC = 0xFF;
 	PORTC = 0x00;
 	
+	PORTC = 0x20;
+	lcd_strobe_lcd_e();	
+	
 	// Sets Data length, number of display lines and character font
 	PORTC = 0x20;   // function set
 					// Data is sent or received in 4 bit length
