@@ -22,8 +22,8 @@ typedef struct
 void easybuzz_init(void);
 void easybuzz_update(void);
 void easybuzz_play_loop(int);
+void easybuzz_play_effect(int);
 void easybuzz_stop_loop(void);
-void easybuzz_play(int);
 void easybuzz_test(void);
 
 #endif /* EASYBUZZ_H_ */
