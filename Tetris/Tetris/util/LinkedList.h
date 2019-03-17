@@ -10,7 +10,6 @@ typedef struct node
 } node;
 
 node *llist_create();
-void  llist_add_last(node **, note_struct);
-note_struct llist_get(node **);
+void  llist_add(node **, note_struct);
 
 #endif

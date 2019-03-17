@@ -5,13 +5,10 @@
  * Author: Daan
  */
 
-#define F_CPU 8000000L
-
 // Ignore pragma warnings, because Atmel doesn't like code regions for some reason
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 
 #include <avr/io.h>
-#include <util/delay.h>
 #include <stdio.h>
 
 #include "EasyBuzz.h"
@@ -22,7 +19,12 @@
 #define SONG_COUNT		2
 
 #define SCALE_LENGTH	12
-#define SCALE_COUNT		4
+#define SCALE_COUNT		5
+
+// Logic constants for the update function
+#define TRUE			1
+#define FALSE			0
+#define NONE		   -1
 
 // Note lengths
 #define FULL			4.0
@@ -35,7 +37,8 @@
 #define SIXTEENTH_DOT	0.375
 #define SIXTEENTH		0.25
 
-#define NOTE_WAIT		20	// Amount of ms that all notes get shortened by to seperate the notes
+// Amount of ms that all notes get shortened by to separate the notes
+#define NOTE_WAIT		20
 
 // Notes (as in the placement in the array)
 #define C	0
@@ -52,12 +55,11 @@
 #define B	11
 
 // Scales (as in the placement in the array)
-#define S4	0
-#define S5	1
-#define S6	2
-#define S7	3
-
-// Note struct is defined in the header for access by the LinkedList
+#define S3	0
+#define S4	1
+#define S5	2
+#define S6	3
+#define S7	4
 
 // Struct that holds a song (bpm and a note linked list (the pointer to the head))
 typedef struct
@@ -69,32 +71,42 @@ typedef struct
 // This 2d array holds the tone frequencies for each note in lists of scales
 int scales[SCALE_COUNT][SCALE_LENGTH] =
 { // C	  Cs   D	Ds	 E	  F	   Fs	G	 Gs	  A	   As	B
+	{131, 139, 147, 156, 165, 175, 185, 196, 208, 220, 233, 247 },	// Scale 3
 	{262, 277, 294, 311, 330, 349, 370, 392, 415, 440, 466, 494 },	// Scale 4
 	{523, 554, 587, 622, 659, 698, 740, 784, 831, 880, 932, 988 },	// Scale 5
 	{1046,1108,1174,1244,1318,1397,1480,1568,1662,1760,1865,1975},	// Scale 6
 	{2093,2217,2349,2489,2637,2794,2960,3136,3322,3520,3729,3951}	// Scale 7
 };
 
-int rest = 0;	// Is used for a rest in a song, is called the same way as a normal note with &rest
+// Is used for a rest in a song, is called the same way as a normal note
+int rest = 0;
 
 // Song array that holds all the playable songs in song structs (called by index from defines in the header file)
 song_struct songs[SONG_COUNT];
 
-// Used for stopping the currently playing song (to be implemented)
-int stop_command;
+// Variables that hold the currently playing loop and effect for the update function
+int loop_index;
+node *loop_node;
+int	loop_bpm;
+int loop_counter;
+
+int effect_index;
+node *effect_node;
+int effect_bpm;
+int effect_counter;
 
 // Main functions
 void easybuzz_init_songs(void);
 
 // Helper functions
-void easybuzz_play_note(note_struct, int);
+void easybuzz_loop_update(int);
+void easybuzz_effect_update(void);
 void easybuzz_init_song(int *, node **, int);
 void easybuzz_add_note(node **, double, double);
 int  easybuzz_get_duration(double, int);
-void easybuzz_wait(int);
 
 // Low level functions (hardware)
-void easybuzz_pwm_init(void);
+void easybuzz_init_pwm(void);
 void easybuzz_pwm_set_frequency(int);
 void easybuzz_pwm_off(void);
 #pragma endregion defines
@@ -103,24 +115,32 @@ void easybuzz_pwm_off(void);
 // Initializes the hardware and songs for the EasyBuzz (called once at startup)
 void easybuzz_init()
 {
-	// TODO: init hardware
-	stop_command = 0;
-	easybuzz_pwm_init();
+	// Initialize the update logic variables
+	loop_index =	NONE;
+	loop_node =		NULL;
+	loop_bpm =		NONE;
+	loop_counter =	0;
+	
+	effect_index =	NONE;
+	effect_node =	NULL;
+	effect_bpm =	NONE;
+	effect_counter= 0;
+
+	// Initialize the hardware and songs
+	easybuzz_init_pwm();
 	easybuzz_init_songs();
+	
+	int num = 0;
 }
 
-void easybuzz_test()
-{
-	easybuzz_init();
-	easybuzz_play(SONG_TETRIS);
-}
-
+// Creates all the song structs with notes and saves them in the songs array
 void easybuzz_init_songs(void)
 {
 	int s = -1;
 	node *n;
 
 	// Test (octave)
+	#pragma region
 	easybuzz_init_song(&s, &n, 200);
 	easybuzz_add_note(&n, scales[S4][C], QUARTER);
 	easybuzz_add_note(&n, scales[S4][D], QUARTER);
@@ -131,8 +151,10 @@ void easybuzz_init_songs(void)
 	easybuzz_add_note(&n, scales[S4][B], QUARTER);
 	easybuzz_add_note(&n, scales[S5][C], QUARTER);
 	songs[s].first_note = n;
+	#pragma endregion
 
 	// Tetris Theme
+	#pragma region 
 	easybuzz_init_song(&s, &n, 150);
 	easybuzz_add_note(&n, scales[S5][E], QUARTER);
 	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
@@ -191,68 +213,132 @@ void easybuzz_init_songs(void)
 	
 	easybuzz_add_note(&n, scales[S4][A], HALF);
 	songs[s].first_note = n;
+	#pragma endregion
 }
 
-// Plays a song from the songlist (given an index). Blocking for now, to be updated...
-void easybuzz_play(int song_index)
+// Update function that handles the loop and effect logic (needs to be called every 1 ms)
+void easybuzz_update()
 {
-	// TODO: add a song queue
-	// TODO: place this in a thread and check first if there is already a song playing
-
-	stop_command = 0;
-	node *current_node = songs[song_index].first_note;
-	int bpm = songs[song_index].bpm;
-
-	while (1)
-	{
-		// TODO: check if the same can be achieved with thread library logic
-		// If the stop command has been given (1), stop playing and set the command to 0 again
-		if (stop_command != 0)
-		{
-			stop_command = 0;
-			return;
-		}
-
-		// check if current_node == NULL, then the song is finished (current_node gets shifted automatically)
-		if (current_node == NULL)
-			return;
-		note_struct note = llist_get(&current_node);
-
-		// Play the next note of the song
-		easybuzz_play_note(note, bpm);
-	}
+	// check if a sound effect needs to play
+	if (effect_index != NONE)
+		easybuzz_effect_update();
+	
+	// check if a loop needs to play
+	if (loop_index != NONE && effect_index == NONE)
+		easybuzz_loop_update(TRUE);
+	
+	// check if a loop needs to tick in the background but not play
+	if (loop_index != NONE && effect_index != NONE)
+		easybuzz_loop_update(FALSE);
 }
 
-// Stops the current playing song (after a note is completed)
-void easybuzz_stop()
+// Plays a song on loop
+void easybuzz_play_loop(int song_index)
 {
-	// TODO: check if the same can be achieved with thread library logic
-	stop_command = 1;
+	// If the loop is already playing, do nothing
+	if (loop_index == song_index)
+		return;
+	
+	loop_index = song_index;
+ 	loop_node = songs[song_index].first_note;
+	loop_bpm = songs[song_index].bpm;
+	loop_counter = 0;
+}
+
+// Plays a song from the songlist (given an index)
+void easybuzz_play_effect(int song_index)
+{
+	effect_index = song_index;
+	effect_node = songs[song_index].first_note;
+	effect_bpm = songs[song_index].bpm;
+	effect_counter = 0;
+}
+
+// Stops the loop (sound effects still get played)
+void easybuzz_stop_loop()
+{
+	// Reset the logic variables
+	loop_index =	NONE;
+	loop_node =		NULL;
+	loop_bpm =		NONE;
+	loop_counter =	0;
+	
+	// Stop the playing sound
+	easybuzz_pwm_off();
+}
+
+void easybuzz_test()
+{
+	easybuzz_init();
+	easybuzz_play_effect(SONG_TETRIS);
 }
 #pragma endregion main_fuctions
 
 #pragma region helper_functions
-// Plays a given note (blocking) and waits in the case of a rest
-void easybuzz_play_note(note_struct note, int bpm)
+void easybuzz_loop_update(int needs_to_play)
 {
-	// If the note is a rest, just wait the length of the note
-	if (note.frequency == 0)
+	note_struct note = loop_node->data;
+	//double jemam = 0.5;
+	int length = easybuzz_get_duration(note.length, loop_bpm);
+	
+	// If the counter is 0 and needs_to_play is TRUE and the note is not a rest, then set the pwm
+	if (loop_counter == 0 && needs_to_play == TRUE && note.frequency != 0)
 	{
-		easybuzz_wait(easybuzz_get_duration(note.length, bpm) + NOTE_WAIT);
+		easybuzz_pwm_set_frequency((int) note.frequency);
+	}
+	// If the counter is more then the length of the note, stop the pwm
+	else if (loop_counter == length)
+	{
+		easybuzz_pwm_off();
+	}
+	// If the counter is more then the length of the note + the note wait, go to the next node
+	else if (loop_counter >= length + NOTE_WAIT)
+	{
+		loop_counter = 0;
+		loop_node = loop_node->next;
+		if (loop_node == NULL)
+			loop_node = songs[loop_index].first_note;
 		return;
 	}
-
-	// Else, set the pwm frequency and wait the lenth of the note
-	easybuzz_pwm_set_frequency((int)note.frequency);
-	easybuzz_wait(easybuzz_get_duration(note.length, bpm));
-	easybuzz_pwm_off();
-	easybuzz_wait(NOTE_WAIT);
+	
+	// Increment the loop ms counter
+	loop_counter++;
 }
 
-// Gets the time in milliseconds that a note should play for, given the bpm and the multiplier (where the quarter note is 1)
-int easybuzz_get_duration(double multiplier, int bpm)
+void easybuzz_effect_update()
 {
-	return (int)(60000.0 / bpm * multiplier - NOTE_WAIT);
+	note_struct note = effect_node->data;
+		
+	int length = easybuzz_get_duration(note.length, effect_bpm);
+	
+	// If the counter is 0 and the note is not a rest, then set the pwm
+	if (effect_counter == 0 && note.frequency != 0)
+	{
+		easybuzz_pwm_set_frequency((int) note.frequency);
+	}
+	// If the counter is more then the length of the note, stop the pwm
+	else if (effect_counter == length)
+	{
+		easybuzz_pwm_off();
+	}
+	// If the counter is more then the length of the note + the note wait, go to the next node
+	else if (effect_counter >= length + NOTE_WAIT)
+	{
+		effect_counter = 0;
+		effect_node = effect_node->next;
+		
+		// If the end of the effect is reached, stop the effect and reset the logic
+		if (effect_node == NULL)
+		{
+			effect_index = NONE;
+			effect_bpm = NONE;
+			effect_counter = 0;
+			return;
+		}
+	}
+	
+	// Increment the effect ms counter
+	effect_counter++;
 }
 
 // Initializes the song for the current song struct (sets bpm, and creates a linked list)
@@ -266,41 +352,40 @@ void easybuzz_init_song(int *song_index, node **head_node, int bpm)
 	songs[*song_index].first_note = head;
 }
 
+// Gets the time in milliseconds that a note should play for, given the bpm and the multiplier (where the quarter note is 1)
+int easybuzz_get_duration(double multiplier, int bpm)
+{
+	
+	return (int)(60000.0 / bpm * multiplier - NOTE_WAIT);
+}
+
 // Adds a note on the end of the note linked list of a song given the song index, last node pointer, and the note fields
 void easybuzz_add_note(node **last_node, double frequency, double length)
 {
 	note_struct note = {.frequency = frequency, .length = length };
-	llist_add_last(last_node, note);
-}
-
-// Sleep method that sleeps for the amount of given ms
-void easybuzz_wait(int ms)
-{
-	// TODO: check if the same can be achieved with thread library logic
-	for (int tms = 0; tms < ms; tms++)
-		_delay_ms(1);			// library function (max 30 ms at 8MHz)
+	llist_add(last_node, note);
 }
 #pragma endregion helper_functions
 
 #pragma region low_level_functions
-void easybuzz_pwm_init()
+void easybuzz_init_pwm()
 {
 	DDRB = 0xFF;
 	TCCR1A = 0b10000010;		// compare output at OC1A  (=PB5)
-	TCCR1B = 0b00011000;		// fast PWM, TOP=ICR1, prescaler=8, RUN
+	TCCR1B = 0b00011000;		// fast PWM, TOP=ICR1
 }
 
 void easybuzz_pwm_set_frequency(int frequency)
 {
+	int ms = (int)(1.0 / frequency * 1000000.0); // Convert hertz to microseconds
+	
 	TCCR1B |= (1 << CS11);		// Turn on the 8 times prescaler (which starts the timer)
-	int ms = (int)(1.0 / frequency * 1000000.0);
-	ICR1	= ms;		// TOP value for counter
-	OCR1A	= ms / 2;	// compare value in between
+	ICR1	= ms;				// TOP value for counter
+	OCR1A	= ms / 2;			// compare value in between
 }
 
 void easybuzz_pwm_off()
 {
-	TCCR1B |= (0 << CS11);		// Turn off the prescaler (which stops the timer)
-	TCCR1B = 0b00011000;		// fast PWM, TOP=ICR1, prescaler=8, NO RUN
+	TCCR1B &= ~(1 << CS11);		// Turn off the prescaler (which stops the timer)
 }
 #pragma endregion low_level_functions

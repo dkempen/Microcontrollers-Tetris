@@ -11,6 +11,8 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
+#include "EasyBuzz.h"
+
 #include "lcd.h"
 
 #define LCD_E 	3
@@ -25,9 +27,9 @@ static unsigned char charset[] =
 void lcd_strobe_lcd_e(void)
 {
 	PORTC |= (1<<LCD_E);	// Enable high
-	_delay_ms(1);			
+	_delay_ms(1);		
 	PORTC &= ~(1<<LCD_E);  	// Enable low
-	_delay_ms(1);			
+	_delay_ms(1);		
 }
 
 void lcd_init(void)

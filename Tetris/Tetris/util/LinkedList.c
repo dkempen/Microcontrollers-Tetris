@@ -12,16 +12,8 @@ node *llist_create()
 	return head;
 }
 
-// Gets the data of the current node and shifts the current node to the next node
-note_struct llist_get(node **current_node)
-{
-	note_struct note = (*current_node)->data;
-	*current_node = (*current_node)->next;
-	return note;
-}
-
-// Add an item to the end of the list with a previous node pointer as parameter and shifts the last node to the current node
-void llist_add_last(node **head_node, note_struct data)
+// Add an item to the end of the list with the head node pointer as parameter
+void llist_add(node **head_node, note_struct data)
 {
 	node *current = *head_node;
 	if (current == NULL)
