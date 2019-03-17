@@ -12,15 +12,40 @@
 #include "Player.h"
 #include "Field.h"
 
+/*
+	Draws the menu
+*/
 void DrawMenu(void);
 
+/*
+	Draws the score
+*/
 void DrawScore(int score);
+
+/*
+	Draws the field
+*/
 void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player);
 
+/*
+	Draws the game over screen
+*/
 void DrawGameOverScreen(int score, int isHighScore);
 
-void DrawHighScoresScreen(int *highscores, int amount);
+/*
+	Draws the high score screen	
+*/
+void DrawHighScoresScreen(int *highscores, int currentScore);
 
+/*
+	Tells the player that the game is about to start
+*/
+void DrawReadyScreen();
+
+/*
+	Tells the player that the game has started
+*/
+void DrawGoScreen();
 
 
 #endif /* DRAW_H_ */

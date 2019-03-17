@@ -6,8 +6,8 @@
  */ 
 
 #include <stdio.h>
-//#include <time.h>
 #include <avr/io.h>
+#include <avr/delay.h>
 
 #include "../util/Random.h"
 
@@ -47,6 +47,12 @@ void RunGame(void)
 	
 	SpawnNewBlock();
 	
+	
+	DrawReadyScreen();
+	_delay_ms(30000);
+	DrawGoScreen();
+	
+	
 	while (GetState() == STATE_GAME)
 	{
 		
@@ -55,7 +61,7 @@ void RunGame(void)
 			millisCounter += 1;
 		}
 		
-		if(millisCounter % 200 != 0){
+		if(millisCounter % 100 != 0){
 			continue;
 		}
 		
