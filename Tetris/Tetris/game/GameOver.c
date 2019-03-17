@@ -5,9 +5,12 @@
  *  Author: Aspire V3-772G-747a8
  */ 
 
+#define F_CPU 8000000L
+
 #include <avr/delay.h>
 
 #include "../hardware/Button.h"
+#include "../hardware/EasyBuzz.h"
 
 #include "StateManager.h"
 #include "GameOver.h"
@@ -24,13 +27,18 @@ void InitGameOver(void)
 
 void RunGameOver(void)
 {
+	
+	DrawGameOverScreen(GetScore(), IsHighScore());
+	
 	//Prevents key presses in another screen from affecting the current screen
 	_delay_ms(1000);
 	
 	while (GetState() == STATE_GAMEOVER)
 	{
-
-		DrawGameOverScreen(GetScore(), IsHighScore());
+		
+		easybuzz_update();
+		_delay_ms(1);
+				
 
 		char input = Button_GetInput();
 

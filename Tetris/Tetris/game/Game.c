@@ -5,9 +5,13 @@
  *  Author: Aspire V3-772G-747a8
  */ 
 
+#define F_CPU 8000000L
+
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/delay.h>
+
+#include "../hardware/EasyBuzz.h"
 
 #include "../util/Random.h"
 
@@ -40,7 +44,8 @@ void InitGame(void)
 
 void RunGame(void)
 {
-	TCCR1B |= ((1 << CS10) | (1 << CS11));
+	
+	TCCR3B |= ((1 << CS10) | (1 << CS11));
 	
 	//Tracks millisecond loops
 	millisCounter = 0;
@@ -49,24 +54,27 @@ void RunGame(void)
 	
 	
 	DrawReadyScreen();
-	_delay_ms(30000);
+	_delay_ms(3000);
 	DrawGoScreen();
 	
 	
 	while (GetState() == STATE_GAME)
 	{
+			
 		
-		if(TCNT1 >= MILLISEC){
-			TCNT1 = 0;
+		if(TCNT3 >= MILLISEC){
+			TCNT3 = 0;
 			millisCounter += 1;
+			easybuzz_update();
 		}
 		
-		if(millisCounter % 100 != 0){
+		if(millisCounter % 200 != 0){
 			continue;
 		}
 		
-		DrawScore(GetScore());
+		//DrawScore(GetScore());
 		DrawField(GetField(), GetPlayer());
+		
 
 		CheckForInput();
 		//AiInput();
@@ -76,9 +84,9 @@ void RunGame(void)
 		{
 			MoveDown();
 			millisCounter = 0;
-			TCNT1 = 0;
+			TCNT3 = 0;
 			
-		}
+		}		
 	}
 
 	if (GetState() == STATE_GAMEOVER)
@@ -91,7 +99,7 @@ void SpawnNewBlock(void)
 {
 	CheckForFullRow();
 
-	InitPlayer(3, 0, GetSeed() % 7);
+	InitPlayer(2, 0, GetSeed() % 7);
 	
 	//If the newly spawned player block is overlapping with the blocks filling the field
 	// then set the state to GameOver

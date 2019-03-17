@@ -11,11 +11,11 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
-#include "hardware/EasyBuzz.h"
 #include "hardware/DotMatrix.h"
 #include "hardware/SegDisplay.h"
 #include "hardware/Button.h"
 #include "hardware/lcd.h"
+#include "hardware/EasyBuzz.h"
 
 #include "util/Random.h"
 
@@ -28,11 +28,11 @@
 int main(void)
 {	
 	//Hardware
-	SegDisplay_Init();
+	//SegDisplay_Init();
 	matrix_init();
 	Button_Init();
 	lcd_init();
-	
+	easybuzz_init();
 		
 	//Util
 	InitRandom();

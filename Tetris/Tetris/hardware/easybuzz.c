@@ -37,7 +37,7 @@
 #define SIXTEENTH_DOT	0.375
 #define SIXTEENTH		0.25
 
-// Amount of ms that all notes get shortened by to seperate the notes
+// Amount of ms that all notes get shortened by to separate the notes
 #define NOTE_WAIT		20
 
 // Notes (as in the placement in the array)
@@ -129,6 +129,8 @@ void easybuzz_init()
 	// Initialize the hardware and songs
 	easybuzz_init_pwm();
 	easybuzz_init_songs();
+	
+	int num = 0;
 }
 
 // Creates all the song structs with notes and saves them in the songs array
@@ -237,7 +239,8 @@ void easybuzz_play_loop(int song_index)
 	if (loop_index == song_index)
 		return;
 	
-	loop_node = songs[song_index].first_note;
+	loop_index = song_index;
+ 	loop_node = songs[song_index].first_note;
 	loop_bpm = songs[song_index].bpm;
 	loop_counter = 0;
 }
@@ -245,6 +248,7 @@ void easybuzz_play_loop(int song_index)
 // Plays a song from the songlist (given an index)
 void easybuzz_play_effect(int song_index)
 {
+	effect_index = song_index;
 	effect_node = songs[song_index].first_note;
 	effect_bpm = songs[song_index].bpm;
 	effect_counter = 0;
@@ -274,6 +278,7 @@ void easybuzz_test()
 void easybuzz_loop_update(int needs_to_play)
 {
 	note_struct note = loop_node->data;
+	//double jemam = 0.5;
 	int length = easybuzz_get_duration(note.length, loop_bpm);
 	
 	// If the counter is 0 and needs_to_play is TRUE and the note is not a rest, then set the pwm
@@ -282,7 +287,7 @@ void easybuzz_loop_update(int needs_to_play)
 		easybuzz_pwm_set_frequency((int) note.frequency);
 	}
 	// If the counter is more then the length of the note, stop the pwm
-	else if (loop_counter >= length)
+	else if (loop_counter == length)
 	{
 		easybuzz_pwm_off();
 	}
@@ -303,6 +308,7 @@ void easybuzz_loop_update(int needs_to_play)
 void easybuzz_effect_update()
 {
 	note_struct note = effect_node->data;
+		
 	int length = easybuzz_get_duration(note.length, effect_bpm);
 	
 	// If the counter is 0 and the note is not a rest, then set the pwm
@@ -311,7 +317,7 @@ void easybuzz_effect_update()
 		easybuzz_pwm_set_frequency((int) note.frequency);
 	}
 	// If the counter is more then the length of the note, stop the pwm
-	else if (effect_counter >= length)
+	else if (effect_counter == length)
 	{
 		easybuzz_pwm_off();
 	}
@@ -349,6 +355,7 @@ void easybuzz_init_song(int *song_index, node **head_node, int bpm)
 // Gets the time in milliseconds that a note should play for, given the bpm and the multiplier (where the quarter note is 1)
 int easybuzz_get_duration(double multiplier, int bpm)
 {
+	
 	return (int)(60000.0 / bpm * multiplier - NOTE_WAIT);
 }
 
@@ -379,6 +386,6 @@ void easybuzz_pwm_set_frequency(int frequency)
 
 void easybuzz_pwm_off()
 {
-	TCCR1B |= (0 << CS11);		// Turn off the prescaler (which stops the timer)
+	TCCR1B &= ~(1 << CS11);		// Turn off the prescaler (which stops the timer)
 }
 #pragma endregion low_level_functions

@@ -5,9 +5,12 @@
  *  Author: Aspire V3-772G-747a8
  */ 
 
+#define F_CPU 8000000L
+
 #include <avr/delay.h>
 
 #include "../hardware/Button.h"
+#include "../hardware/easybuzz.h"
 
 #include "Menu.h"
 #include "StateManager.h"
@@ -24,16 +27,20 @@ void InitMenu(void)
 
 void RunMenu(void)
 {	
+	
+	DrawMenu();
+	
 	//Prevents key presses in another screen from affecting the current screen
 	_delay_ms(1000);
 	
+	easybuzz_play_loop(SONG_TETRIS);	
+		
 	while (GetState() == STATE_MENU) {
 		
-		//Easybuzz
+		
+		easybuzz_update();
 		_delay_ms(1);
-				
-		DrawMenu();
-
+		
 		char input = Button_GetInput(); 
 
 		if (input == 'd')
@@ -42,8 +49,11 @@ void RunMenu(void)
 		SetState(STATE_HIGHSCORES);
 	//	else if (input == 'a')
 	//	SetState(STATE_EXIT);
-
+	
 	}
+
+	easybuzz_stop_loop();
+	
 
 	if (GetState() == STATE_GAME)
 	InitGame();

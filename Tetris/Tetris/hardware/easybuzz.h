@@ -9,7 +9,7 @@
 #define EASYBUZZ_H_
 
 // Defines for identifying the song that needs to be played
-#define SONG_TEST	0
+#define SONG_TEST 0
 #define SONG_TETRIS	1
 
 // Struct that holds a note (frequency and length)
