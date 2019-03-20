@@ -15,8 +15,7 @@
 #define BUTTON_TURN_RIGHT 0x08 //PINE
 
 void Button_Init(void)
-{
-	
+{	
 	DDRE = 0b00000000;
 } 
 
@@ -30,8 +29,8 @@ char Button_GetInput(void)
 		return 'd';
 	else if ((PINE & BUTTON_TURN_LEFT))
 		return 'q';
-	//else if ((PINE & BUTTON_TURN_RIGHT))
-	//	return 'e';
+	else if ((PINE & BUTTON_TURN_RIGHT))
+		return 'e';
 	else
 		return 'w';	
 	

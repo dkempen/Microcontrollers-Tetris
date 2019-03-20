@@ -73,7 +73,7 @@ void RunGame(void)
 			CheckForInput();
 		}
 		
-		if(millisCounter2 < 200){
+		if(millisCounter2 < 100){
 			continue;
 		}
 				
