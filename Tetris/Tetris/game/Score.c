@@ -6,6 +6,7 @@
  */ 
 
 #include "Score.h"
+#include "../hardware/Eeprom.h"
 
 
 int score;
@@ -21,8 +22,7 @@ void InitScore(void)
 
 void InitHighScores(void)
 {
-	for (int i = 0; i < MAX_AMOUNT_OF_HIGHSCORES; i++)
-	highScores[i] = 0;
+	ReadHighScores(&highScores, MAX_AMOUNT_OF_HIGHSCORES);
 }
 
 void IncreaseScore(int amount)
@@ -50,6 +50,14 @@ void SetAsHighScore(int pos)
 	}
 
 	highScores[pos] = score;
+	
+	WriteHighScores(highScores, MAX_AMOUNT_OF_HIGHSCORES);
+}
+
+void SetHighScores(int *highscores){
+	for(int i = 0; i < MAX_AMOUNT_OF_HIGHSCORES; i++){
+		highScores[i] = highscores[i];
+	}
 }
 
 int GetScore(void)

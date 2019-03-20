@@ -18,6 +18,13 @@ void IncreaseScore(int amount);
 void CheckIfHighScore(void);
 void SetAsHighScore(int pos);
 
+/*
+	Used by the Eeprom to set the highscores in non-volatile memory
+	
+	@param highscores - The highscores in non-volatile memory
+*/
+void SetHighScores(int *highscores);
+
 int GetScore(void);
 int *GetHighScores(void);
 
