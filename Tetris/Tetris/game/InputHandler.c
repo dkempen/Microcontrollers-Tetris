@@ -19,6 +19,10 @@ int currentInput = IDLE;
 
 void CheckForInput(void)
 {
+	//Prevents the input from becoming idle again after a key press
+	if(currentInput != IDLE)
+		return;
+	
 	char input = Button_GetInput();//'w'; //TODO: Replace with keys from BigAVR
 
 	if (input == 'a')
@@ -58,4 +62,8 @@ void AiInput(void)
 int GetCurrentInput(void)
 {
 	return currentInput;
+}
+
+void ResetInput(void){
+	currentInput = IDLE;
 }

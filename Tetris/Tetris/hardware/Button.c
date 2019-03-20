@@ -30,8 +30,8 @@ char Button_GetInput(void)
 		return 'd';
 	else if ((PINE & BUTTON_TURN_LEFT))
 		return 'q';
-	else if ((PINE & BUTTON_TURN_RIGHT))
-		return 'e';
+	//else if ((PINE & BUTTON_TURN_RIGHT))
+	//	return 'e';
 	else
 		return 'w';	
 	

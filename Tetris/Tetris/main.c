@@ -28,7 +28,7 @@
 int main(void)
 {	
 	//Hardware
-	//SegDisplay_Init();
+	SegDisplay_Init();
 	matrix_init();
 	Button_Init();
 	lcd_init();

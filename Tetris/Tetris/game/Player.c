@@ -33,21 +33,28 @@ void UpdatePlayer(void)
 		case MOVE_LEFT:
 		player.x -= 1;
 		break;
+		
 		case MOVE_RIGHT:
 		player.x += 1;
 		break;
+		
 		case TURN_LEFT:
 		Rotate(&player, 1);
 		break;
+		
 		case TURN_RIGHT:
 		Rotate(&player, 0);
 		break;
+		
 		case MOVE_DOWN:
 		player.y += 1;
 		break;
+		
 		case IDLE:
 		break;
 	}
+	
+	ResetInput();
 
 	if (IsOutOfBounds(player) == 0) {
 		player.x = prevx;
