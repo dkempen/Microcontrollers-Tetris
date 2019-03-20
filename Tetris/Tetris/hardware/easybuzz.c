@@ -129,8 +129,6 @@ void easybuzz_init()
 	// Initialize the hardware and songs
 	easybuzz_init_pwm();
 	easybuzz_init_songs();
-	
-	int num = 0;
 }
 
 // Creates all the song structs with notes and saves them in the songs array
@@ -187,7 +185,7 @@ void easybuzz_init_songs(void)
 	
 	easybuzz_add_note(&n, rest,			 EIGHTH);
 	easybuzz_add_note(&n, scales[S5][D], QUARTER);
-	easybuzz_add_note(&n, scales[S4][F], EIGHTH);
+	easybuzz_add_note(&n, scales[S5][F], EIGHTH);
 	
 	easybuzz_add_note(&n, scales[S5][A], QUARTER);
 	easybuzz_add_note(&n, scales[S5][G], EIGHTH);
@@ -278,7 +276,6 @@ void easybuzz_test()
 void easybuzz_loop_update(int needs_to_play)
 {
 	note_struct note = loop_node->data;
-	//double jemam = 0.5;
 	int length = easybuzz_get_duration(note.length, loop_bpm);
 	
 	// If the counter is 0 and needs_to_play is TRUE and the note is not a rest, then set the pwm
@@ -287,7 +284,7 @@ void easybuzz_loop_update(int needs_to_play)
 		easybuzz_pwm_set_frequency((int) note.frequency);
 	}
 	// If the counter is more then the length of the note, stop the pwm
-	else if (loop_counter == length)
+	else if (loop_counter == length && needs_to_play == TRUE)
 	{
 		easybuzz_pwm_off();
 	}
@@ -308,7 +305,6 @@ void easybuzz_loop_update(int needs_to_play)
 void easybuzz_effect_update()
 {
 	note_struct note = effect_node->data;
-		
 	int length = easybuzz_get_duration(note.length, effect_bpm);
 	
 	// If the counter is 0 and the note is not a rest, then set the pwm
@@ -333,8 +329,8 @@ void easybuzz_effect_update()
 			effect_index = NONE;
 			effect_bpm = NONE;
 			effect_counter = 0;
-			return;
 		}
+		return;
 	}
 	
 	// Increment the effect ms counter
@@ -355,7 +351,6 @@ void easybuzz_init_song(int *song_index, node **head_node, int bpm)
 // Gets the time in milliseconds that a note should play for, given the bpm and the multiplier (where the quarter note is 1)
 int easybuzz_get_duration(double multiplier, int bpm)
 {
-	
 	return (int)(60000.0 / bpm * multiplier - NOTE_WAIT);
 }
 
