@@ -35,7 +35,7 @@ void WriteHighScores(int *highScores, int size)
 	}	
 }
 
-ReadHighScores(int *highScores, int size)
+void ReadHighScores(int *highScores, int size)
 {
 	for(int i = 0; i < size; i++){
 		highScores[i] = ReadHighScore(0x11 + (1*i));		

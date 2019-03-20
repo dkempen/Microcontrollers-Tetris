@@ -85,7 +85,7 @@ void RunGame(void)
 		//AiInput();
 		UpdatePlayer();
 
-		if (millisCounter >= 1000)
+		if (millisCounter >= ((1000-(GetRowsRemoved()*10))) + 100)
 		{
 			MoveDown();
 			millisCounter = 0;

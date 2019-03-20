@@ -12,7 +12,7 @@
 #include "Player.h"
 
 #define FIELD_WIDTH 8
-#define FIELD_LENGTH 16
+#define FIELD_LENGTH 17 //Last row is for collision
 
 void InitField(void);
 
@@ -40,8 +40,15 @@ Removes a row from the field and moves the rows above it 1 row down
 */
 void RemoveRow(int row);
 
+/*
+	Returns the game field
+*/
 int** GetField(void);
 
+/*
+	Returns the amount of rows that have been removed in one play session
+*/
+int GetRowsRemoved(void);
 
 
 #endif /* FIELD_H_ */

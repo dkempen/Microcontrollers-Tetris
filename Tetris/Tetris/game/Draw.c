@@ -28,28 +28,39 @@ void DrawScore(int score)
 }
 
 void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player)
-{
-	
-	int tempField[FIELD_WIDTH][FIELD_LENGTH];
+{	
+	int tempField[FIELD_WIDTH][FIELD_LENGTH-1];
 
 	//Fill field with values from the original field
 	for (int x = 0; x < FIELD_WIDTH; x++) {
-		for (int y = 0; y < FIELD_LENGTH; y++) {
+		for (int y = 0; y < FIELD_LENGTH-1; y++) {
 			tempField[x][y] = field[x][y];
 		}
 	}
+	
 	//Insert the tiles occupied by the player into the field that will be drawn
 	for (int y = 0; y < BLOCK_STORE_SIZE; y++) {
 		for (int x = 0; x < BLOCK_STORE_SIZE; x++) {
-
 			if (player.block.tiles[y][x] == 1)
 			tempField[player.x + x][player.y + y] = 1;
-
 		}
 	}
 
-	matrix_draw_game_field(tempField);
+	matrix_draw_game_field(tempField);	
+}
+
+void DrawFieldWithoutPlayer(int field[FIELD_WIDTH][FIELD_LENGTH])
+{
+	int tempField[FIELD_WIDTH][FIELD_LENGTH-1];
+
+	//Fill field with values from the original field
+	for (int x = 0; x < FIELD_WIDTH; x++) {
+		for (int y = 0; y < FIELD_LENGTH-1; y++) {
+			tempField[x][y] = field[x][y];
+		}
+	}
 	
+	matrix_draw_game_field(tempField);	
 }
 
 void DrawGameOverScreen(int score, int isHighScore)

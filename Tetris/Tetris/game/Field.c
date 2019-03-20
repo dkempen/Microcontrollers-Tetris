@@ -14,6 +14,9 @@
 
 int field[FIELD_WIDTH][FIELD_LENGTH];
 
+
+int removedRows;
+
 void InitField(void)
 {
 	for (int x = 0; x < FIELD_WIDTH; x++) {
@@ -24,8 +27,8 @@ void InitField(void)
 			if (y == FIELD_LENGTH-1)
 			field[x][y] = 1;
 		}
-
 	}
+	removedRows = 0;
 }
 
 void AddPlayerToField(Player player)
@@ -69,7 +72,7 @@ void CheckForFullRow(void)
 			easybuzz_play_effect(EFFECT_CLEAR);
 			
 			//Score increases multiplicatively per row removed
-			//This incentivises taking out multiple rows at once
+			//This creates incentive for taking out multiple rows at once
 			amountOfRowsRemoved++;
 			IncreaseScore(POINTS_PER_ROW * amountOfRowsRemoved);
 		}
@@ -91,9 +94,15 @@ void RemoveRow(int row)
 	for (int x = 0; x < FIELD_WIDTH; x++) {
 		field[x][0] = 0;
 	}
+	
+	removedRows += 1;	
 }
 
 int ** GetField(void)
 {
 	return field;
+}
+
+int GetRowsRemoved(void){
+	return removedRows;
 }

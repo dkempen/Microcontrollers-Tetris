@@ -32,7 +32,6 @@ void RunGameOver(void)
 	DrawGameOverScreen(GetScore(), IsHighScore());
 	easybuzz_stop_loop();
 	easybuzz_play_effect(EFFECT_GAME_OVER);
-	//easybuzz_stop_loop();
 	
 	//Prevents key presses in another screen from affecting the current screen
 	int i = 0;
@@ -41,7 +40,7 @@ void RunGameOver(void)
 		if (i == 0 || i == 500)
 			matrix_fill();
 		if (i == 250 || i == 750)
-			matrix_draw_game_field(GetField());
+			DrawFieldWithoutPlayer(GetField());
 		easybuzz_update();
 		_delay_ms(1);
 		i++;

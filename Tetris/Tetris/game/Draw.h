@@ -28,6 +28,11 @@ void DrawScore(int score);
 void DrawField(int field[FIELD_WIDTH][FIELD_LENGTH], Player player);
 
 /*
+	Draws the field without the player
+*/
+void DrawFieldWithoutPlayer(int field[FIELD_WIDTH][FIELD_LENGTH]);
+
+/*
 	Draws the game over screen
 */
 void DrawGameOverScreen(int score, int isHighScore);
