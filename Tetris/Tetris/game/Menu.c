@@ -52,12 +52,8 @@ void RunMenu(void)
 	
 	}
 
-	easybuzz_stop_loop();
-	
-
 	if (GetState() == STATE_GAME)
-	InitGame();
+		InitGame();
 	else if (GetState() == STATE_HIGHSCORES)
-	InitHighScoresScreen();
-
+		InitHighScoresScreen();
 }

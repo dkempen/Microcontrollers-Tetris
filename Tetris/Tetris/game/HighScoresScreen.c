@@ -65,8 +65,6 @@ void RunHighScoresScreen(void)
 	
 	}
 
-	easybuzz_stop_loop();
-
 	if (GetState() == STATE_MENU)
 	RunMenu();
 }
