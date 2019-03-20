@@ -8,9 +8,9 @@
 #include <avr/io.h>
 #include "../hardware/Button.h"
 
-#define BUTTON_MOVE_LEFT 0x80  //PIND
-#define BUTTON_MOVE_DOWN 0x40  //PIND
-#define BUTTON_MOVE_RIGHT 0x01 //PINE
+#define BUTTON_MOVE_LEFT 0x80  //PINE
+#define BUTTON_MOVE_DOWN 0x01  //PINE
+#define BUTTON_MOVE_RIGHT 0x40 //PINE
 #define BUTTON_TURN_LEFT 0x04  //PINE
 #define BUTTON_TURN_RIGHT 0x08 //PINE
 
