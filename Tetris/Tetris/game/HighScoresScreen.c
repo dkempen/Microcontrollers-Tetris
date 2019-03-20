@@ -41,17 +41,25 @@ void RunHighScoresScreen(void)
 		easybuzz_update();
 		_delay_ms(1);
 
-
 		char input = Button_GetInput();
 
 		if (input == 's')
 			SetState(STATE_MENU);
-		else if (input == 'd'){
+		else if (input == 'd'){	
+			
 			currentElement ++;	
 			if(currentElement >= MAX_AMOUNT_OF_HIGHSCORES)
 				currentElement = 0;	
 				
-		    DrawHighScoresScreen(GetHighScores(), currentElement);		
+		    DrawHighScoresScreen(GetHighScores(), currentElement);	
+			
+			int counter = 0;
+			while(counter < 500){
+				easybuzz_update();
+				_delay_ms(1);	
+			counter++;
+			}	
+			
 		}
 	
 	
