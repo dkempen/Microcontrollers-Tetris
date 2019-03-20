@@ -16,7 +16,7 @@
 
 #pragma region defines
 // Defines for array lengths
-#define SONG_COUNT		2
+#define SONG_COUNT		4
 
 #define SCALE_LENGTH	12
 #define SCALE_COUNT		5
@@ -137,79 +137,115 @@ void easybuzz_init_songs(void)
 	int s = -1;
 	node *n;
 
-	// Test (octave)
+	// Menu
 	#pragma region
-	easybuzz_init_song(&s, &n, 200);
-	easybuzz_add_note(&n, scales[S4][C], QUARTER);
-	easybuzz_add_note(&n, scales[S4][D], QUARTER);
-	easybuzz_add_note(&n, scales[S4][E], QUARTER);
-	easybuzz_add_note(&n, scales[S4][F], QUARTER);
-	easybuzz_add_note(&n, scales[S4][G], QUARTER);
-	easybuzz_add_note(&n, scales[S4][A], QUARTER);
-	easybuzz_add_note(&n, scales[S4][B], QUARTER);
-	easybuzz_add_note(&n, scales[S5][C], QUARTER);
+	easybuzz_init_song(&s, &n, 130);
+	easybuzz_add_note(&n, scales[S4][D], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][As], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][G], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][G], SIXTEENTH);
+	easybuzz_add_note(&n, scales[S4][D], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][D], SIXTEENTH);
+	easybuzz_add_note(&n, scales[S4][A], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][F], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][F], SIXTEENTH);
+
+	easybuzz_add_note(&n, scales[S4][D], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][D], SIXTEENTH);
+	easybuzz_add_note(&n, scales[S4][A], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][F], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][F], SIXTEENTH);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][E], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][E], SIXTEENTH);
+	easybuzz_add_note(&n, scales[S4][F], EIGHTH);
+
 	songs[s].first_note = n;
 	#pragma endregion
 
 	// Tetris Theme
 	#pragma region 
 	easybuzz_init_song(&s, &n, 150);
-	easybuzz_add_note(&n, scales[S5][E], QUARTER);
-	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
-	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][E], QUARTER);
+	easybuzz_add_note(&n, scales[S3][B], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
 	
-	easybuzz_add_note(&n, scales[S5][D], QUARTER);
-	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
-	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][D], QUARTER);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
+	easybuzz_add_note(&n, scales[S3][B], EIGHTH);
 	
-	easybuzz_add_note(&n, scales[S4][A], QUARTER_DOT);
-	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	easybuzz_add_note(&n, scales[S3][A], QUARTER_DOT);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
 	
-	easybuzz_add_note(&n, scales[S5][E], QUARTER);
-	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
-	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][E], QUARTER);
+	easybuzz_add_note(&n, scales[S3][B], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
 	
-	easybuzz_add_note(&n, scales[S4][B], QUARTER_DOT);
-	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
+	easybuzz_add_note(&n, scales[S3][B], QUARTER_DOT);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
 	
-	easybuzz_add_note(&n, scales[S5][D], QUARTER);
-	easybuzz_add_note(&n, scales[S5][E], QUARTER);
+	easybuzz_add_note(&n, scales[S4][D], QUARTER);
+	easybuzz_add_note(&n, scales[S4][E], QUARTER);
 
+	easybuzz_add_note(&n, scales[S4][C], QUARTER);
+	easybuzz_add_note(&n, scales[S3][A], EIGHTH);
+	easybuzz_add_note(&n, rest,			 EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S3][A], HALF);
+	
+	
+	
+	easybuzz_add_note(&n, rest,			 EIGHTH);
+	easybuzz_add_note(&n, scales[S4][D], QUARTER);
+	easybuzz_add_note(&n, scales[S4][F], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S4][A], QUARTER);
+	easybuzz_add_note(&n, scales[S4][G], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][F], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S4][E], QUARTER_DOT);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S4][E], QUARTER);
+	easybuzz_add_note(&n, scales[S4][D], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S3][B], QUARTER);
+	easybuzz_add_note(&n, scales[S3][B], EIGHTH);
+	easybuzz_add_note(&n, scales[S4][C], EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S4][D], QUARTER);
+	easybuzz_add_note(&n, scales[S4][E], QUARTER);
+	
+	easybuzz_add_note(&n, scales[S4][C], QUARTER);
+	easybuzz_add_note(&n, scales[S3][A], EIGHTH);
+	easybuzz_add_note(&n, rest,			 EIGHTH);
+	
+	easybuzz_add_note(&n, scales[S3][A], HALF);
+	songs[s].first_note = n;
+	#pragma endregion
+
+	// Row clear
+	#pragma region
+	easybuzz_init_song(&s, &n, 100);
+	easybuzz_add_note(&n, rest,			 EIGHTH);
+	easybuzz_add_note(&n, scales[S4][C], SIXTEENTH);
+	easybuzz_add_note(&n, scales[S4][G], SIXTEENTH);
 	easybuzz_add_note(&n, scales[S5][C], QUARTER);
-	easybuzz_add_note(&n, scales[S4][A], EIGHTH);
 	easybuzz_add_note(&n, rest,			 EIGHTH);
-	
-	easybuzz_add_note(&n, scales[S4][A], HALF);
-	
-	
-	
+	songs[s].first_note = n;
+	#pragma endregion
+
+	// Game over
+	#pragma region
+	easybuzz_init_song(&s, &n, 120);
 	easybuzz_add_note(&n, rest,			 EIGHTH);
-	easybuzz_add_note(&n, scales[S5][D], QUARTER);
-	easybuzz_add_note(&n, scales[S5][F], EIGHTH);
-	
-	easybuzz_add_note(&n, scales[S5][A], QUARTER);
-	easybuzz_add_note(&n, scales[S5][G], EIGHTH);
-	easybuzz_add_note(&n, scales[S5][F], EIGHTH);
-	
-	easybuzz_add_note(&n, scales[S5][E], QUARTER_DOT);
-	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
-	
-	easybuzz_add_note(&n, scales[S5][E], QUARTER);
+	easybuzz_add_note(&n, scales[S4][D], SIXTEENTH);
+	easybuzz_add_note(&n, scales[S4][D], SIXTEENTH);
 	easybuzz_add_note(&n, scales[S5][D], EIGHTH);
-	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
-	
-	easybuzz_add_note(&n, scales[S4][B], QUARTER);
-	easybuzz_add_note(&n, scales[S4][B], EIGHTH);
-	easybuzz_add_note(&n, scales[S5][C], EIGHTH);
-	
-	easybuzz_add_note(&n, scales[S5][D], QUARTER);
-	easybuzz_add_note(&n, scales[S5][E], QUARTER);
-	
-	easybuzz_add_note(&n, scales[S5][C], QUARTER);
 	easybuzz_add_note(&n, scales[S4][A], EIGHTH);
 	easybuzz_add_note(&n, rest,			 EIGHTH);
-	
-	easybuzz_add_note(&n, scales[S4][A], HALF);
 	songs[s].first_note = n;
 	#pragma endregion
 }
@@ -250,6 +286,7 @@ void easybuzz_play_effect(int song_index)
 	effect_node = songs[song_index].first_note;
 	effect_bpm = songs[song_index].bpm;
 	effect_counter = 0;
+	easybuzz_pwm_off();
 }
 
 // Stops the loop (sound effects still get played)

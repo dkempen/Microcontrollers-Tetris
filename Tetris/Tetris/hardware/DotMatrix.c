@@ -23,6 +23,7 @@
 void twi_init(void);
 void matrix_init_display(int);
 void matrix_clear_display(int);
+void matrix_fill_display(int);
 
 void wait(int);
 void draw_row(int, int, int);
@@ -79,6 +80,20 @@ void matrix_clear_display(int address)
 {
 	for (int y = 0; y < 8; y ++)
 		draw_row(address, y, 0);
+}
+
+// Fills both of the maxtrix displays
+void matrix_fill()
+{
+	matrix_fill_display(D0_I2C_ADDR);
+	matrix_fill_display(D1_I2C_ADDR);
+}
+
+// Fills the maxtrix display with the given address
+void matrix_fill_display(int address)
+{
+	for (int y = 0; y < 8; y ++)
+		draw_row(address, y, 0xFF);
 }
 
 /* Draws the game field to both of the matrix displays (D0 is the top display, D1 is the bottom display)

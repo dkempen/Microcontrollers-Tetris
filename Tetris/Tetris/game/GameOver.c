@@ -10,6 +10,7 @@
 #include <avr/delay.h>
 
 #include "../hardware/Button.h"
+#include "../hardware//DotMatrix.h"
 #include "../hardware/EasyBuzz.h"
 
 #include "StateManager.h"
@@ -19,6 +20,7 @@
 
 #include "Draw.h"
 #include "Score.h"
+#include "Field.h"
 
 void InitGameOver(void)
 {
@@ -27,11 +29,23 @@ void InitGameOver(void)
 
 void RunGameOver(void)
 {
-	
 	DrawGameOverScreen(GetScore(), IsHighScore());
+	easybuzz_stop_loop();
+	easybuzz_play_effect(EFFECT_GAME_OVER);
+	//easybuzz_stop_loop();
 	
 	//Prevents key presses in another screen from affecting the current screen
-	_delay_ms(1000);
+	int i = 0;
+	while (i < 1000)
+	{
+		if (i == 0 || i == 500)
+			matrix_fill();
+		if (i == 250 || i == 750)
+			matrix_draw_game_field(GetField());
+		easybuzz_update();
+		_delay_ms(1);
+		i++;
+	}
 	
 	while (GetState() == STATE_GAMEOVER)
 	{

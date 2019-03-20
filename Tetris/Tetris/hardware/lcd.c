@@ -37,6 +37,13 @@ void lcd_init(void)
 	// PORTC output mode and all low, as well as Enable pin and Register select pin
 	DDRC = 0xFF;
 	PORTC = 0x00;
+
+	//_delay_ms(30);
+
+	//_delay_ms(10);
+	PORTC = 0b00000010;
+	//lcd_strobe_lcd_e();
+	_delay_ms(15);
 	
 	PORTC = 0x20;
 	lcd_strobe_lcd_e();	

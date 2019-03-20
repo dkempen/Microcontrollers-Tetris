@@ -32,15 +32,12 @@ void RunMenu(void)
 	matrix_clear();
 	
 	DrawMenu();
+	easybuzz_play_loop(SONG_MENU);
 	
 	//Prevents key presses in another screen from affecting the current screen
 	_delay_ms(1000);
 	
-	easybuzz_play_loop(SONG_TETRIS);	
-		
 	while (GetState() == STATE_MENU) {
-		
-		
 		easybuzz_update();
 		_delay_ms(1);
 		

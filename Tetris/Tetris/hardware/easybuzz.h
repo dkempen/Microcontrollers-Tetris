@@ -9,8 +9,10 @@
 #define EASYBUZZ_H_
 
 // Defines for identifying the song that needs to be played
-#define SONG_TEST 0
+#define SONG_MENU 0
 #define SONG_TETRIS	1
+#define EFFECT_CLEAR 2
+#define EFFECT_GAME_OVER 3
 
 // Struct that holds a note (frequency and length)
 typedef struct

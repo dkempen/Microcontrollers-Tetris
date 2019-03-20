@@ -6,8 +6,9 @@
  */ 
 
 #include "Field.h"
-
 #include "Score.h"
+
+#include "../hardware/EasyBuzz.h"
 
 #define POINTS_PER_ROW 1
 
@@ -64,6 +65,8 @@ void CheckForFullRow(void)
 		//Removes the row that is full
 		if (amountFilled == FIELD_WIDTH) {
 			RemoveRow(y);
+			
+			easybuzz_play_effect(EFFECT_CLEAR);
 			
 			//Score increases multiplicatively per row removed
 			//This incentivises taking out multiple rows at once
