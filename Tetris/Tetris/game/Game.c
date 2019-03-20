@@ -55,12 +55,11 @@ void RunGame(void)
 	
 	SpawnNewBlock();
 	
-	easybuzz_play_loop(SONG_TETRIS);
-	
 	DrawReadyScreen();
 	_delay_ms(3000);
 	DrawGoScreen();
 	
+	easybuzz_play_loop(SONG_TETRIS);
 	
 	while (GetState() == STATE_GAME)
 	{

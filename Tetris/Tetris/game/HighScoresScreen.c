@@ -33,8 +33,6 @@ void RunHighScoresScreen(void)
 	
 	//Prevents key presses in another screen from affecting the current screen
 	_delay_ms(1000);
-	
-	easybuzz_play_loop(SONG_MENU);
 
 	while (GetState() == STATE_HIGHSCORES) {
 		

@@ -47,11 +47,10 @@ void RunMenu(void)
 		SetState(STATE_GAME);
 		else if (input == 's')
 		SetState(STATE_HIGHSCORES);
-	//	else if (input == 'a')
-	//	SetState(STATE_EXIT);
-	
 	}
-
+	
+	easybuzz_stop_loop();
+	
 	if (GetState() == STATE_GAME)
 		InitGame();
 	else if (GetState() == STATE_HIGHSCORES)
