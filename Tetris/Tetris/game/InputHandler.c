@@ -18,8 +18,8 @@ int currentInput = IDLE;
 
 
 void CheckForInput(void)
-{
-	char input = Button_GetInput();//'w'; //TODO: Replace with keys from BigAVR
+{	
+	char input = Button_GetInput();
 
 	if (input == 'a')
 	currentInput = MOVE_LEFT;
@@ -37,8 +37,6 @@ void CheckForInput(void)
 
 void AiInput(void)
 {
-	//srand(seed);
-	//srand(time(NULL)); Atmel doesn't seem to accept time(NULL), so this doesn't work
 	int num = (GetSeed()) % 6;
 
 	if (num == 0)
@@ -58,4 +56,8 @@ void AiInput(void)
 int GetCurrentInput(void)
 {
 	return currentInput;
+}
+
+void ResetInput(void){
+	currentInput = IDLE;
 }

@@ -11,6 +11,7 @@
 
 #include "../hardware/Button.h"
 #include "../hardware/easybuzz.h"
+#include "../hardware/DotMatrix.h"
 
 #include "Menu.h"
 #include "StateManager.h"
@@ -27,6 +28,8 @@ void InitMenu(void)
 
 void RunMenu(void)
 {	
+	SegDisplay_writeLedScore(0);
+	matrix_clear();
 	
 	DrawMenu();
 	

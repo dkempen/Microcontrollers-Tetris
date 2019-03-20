@@ -15,11 +15,25 @@ Controls all player input
 
 enum Inputs {IDLE, MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, TURN_LEFT, TURN_RIGHT};
 
-
+/*
+	Checks for key presses
+*/
 void CheckForInput(void);
+
+/*
+	Returns random inputs 
+*/
 void AiInput(void);
+
+/*
+	Returns the current input
+*/
 int GetCurrentInput(void);
 
+/*
+	Sets the current input back to IDLE
+*/
+void ResetInput(void);
 
 
 #endif /* INPUTHANDLER_H_ */

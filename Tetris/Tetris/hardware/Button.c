@@ -15,8 +15,7 @@
 #define BUTTON_TURN_RIGHT 0x08 //PINE
 
 void Button_Init(void)
-{
-	
+{	
 	DDRE = 0b00000000;
 } 
 

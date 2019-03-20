@@ -31,6 +31,7 @@
 #define MILLISEC 128
 
 int millisCounter;
+int millisCounter2;
 
 void InitGame(void)
 {
@@ -44,11 +45,13 @@ void InitGame(void)
 
 void RunGame(void)
 {
-	
 	TCCR3B |= ((1 << CS10) | (1 << CS11));
 	
 	//Tracks millisecond loops
 	millisCounter = 0;
+	
+	//Does the same, for the input loop
+	millisCounter2 = 0;
 	
 	SpawnNewBlock();
 	
@@ -65,18 +68,20 @@ void RunGame(void)
 		if(TCNT3 >= MILLISEC){
 			TCNT3 = 0;
 			millisCounter += 1;
+			millisCounter2 += 1;
 			easybuzz_update();
+			CheckForInput();
 		}
 		
-		if(millisCounter % 200 != 0){
+		if(millisCounter2 < 100){
 			continue;
 		}
+				
+		millisCounter2 = 0;
 		
-		//DrawScore(GetScore());
+		DrawScore(GetScore());
 		DrawField(GetField(), GetPlayer());
 		
-
-		CheckForInput();
 		//AiInput();
 		UpdatePlayer();
 
