@@ -2,7 +2,7 @@
  * Field.c
  *
  * Created: 27-2-2019 14:58:27
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 #include "Field.h"
@@ -53,7 +53,7 @@ void CheckForFullRow(void)
 {
 	int amountOfRowsRemoved = 0;
 
-	//Does starts at the top and works its way down.
+	//Starts at the top and works its way down.
 	//This way, removing a row does not interfere with removing another (because the index of the full rows doesn't change)
 	//If it started from the bottom, then another full row would move down, which would cause it to be skipped
 	//-1, Because the last row is the bottom of the field, this has to be preserved

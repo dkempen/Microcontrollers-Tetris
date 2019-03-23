@@ -2,7 +2,7 @@
  * Random.c
  *
  * Created: 13-3-2019 19:00:28
- *  Author: Gebruiker
+ *  Author: Ian
  */ 
 
 #include "Random.h"

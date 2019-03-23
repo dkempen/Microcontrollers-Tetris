@@ -2,25 +2,27 @@
  * Game.h
  *
  * Created: 27-2-2019 15:01:41
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 
 #ifndef GAME_H_
 #define GAME_H_
 
-/*
-	Holds the game logic, 
-	like resetting the player block after a collision
-*/
 
+/*
+	Initializes the game
+*/
 void InitGame(void);
 
+/*
+	Runs the game loop
+*/
 void RunGame(void);
 
 
 /*
-Spawns a new, random block
+	Spawns a new, random block
 */
 void SpawnNewBlock(void);
 

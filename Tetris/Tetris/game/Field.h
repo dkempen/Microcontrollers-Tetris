@@ -2,7 +2,7 @@
  * Field.h
  *
  * Created: 27-2-2019 15:01:32
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 
@@ -11,9 +11,16 @@
 
 #include "Player.h"
 
+/*
+	The dimensions of the playing field
+*/
 #define FIELD_WIDTH 8
-#define FIELD_LENGTH 17 //Last row is for collision
+#define FIELD_LENGTH 17 //Last row is for collision, not drawn
 
+
+/*
+	Initializes the game field
+*/
 void InitField(void);
 
 /*
@@ -23,8 +30,6 @@ void InitField(void);
 	@param player - The player object
 */
 void AddPlayerToField(Player player);
-
-
 
 /*
 Checks if a row is filled with blocks.

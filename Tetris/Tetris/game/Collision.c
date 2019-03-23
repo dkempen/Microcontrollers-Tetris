@@ -2,7 +2,7 @@
  * Collision.c
  *
  * Created: 27-2-2019 14:58:08
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 #include "Collision.h"
@@ -30,7 +30,7 @@ int IsOutOfBounds(Player player)
 			//If it's occupied
 			if (player.block.tiles[y][x] == 1) {
 
-				//Check if it is oob
+				//Check if it is out of bounds
 				if (player.x + x >= FIELD_WIDTH || player.x + x < 0)
 				return 0;
 			}

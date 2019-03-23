@@ -2,7 +2,7 @@
  * InputHandler.h
  *
  * Created: 27-2-2019 15:02:12
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 
@@ -10,9 +10,8 @@
 #define INPUTHANDLER_H_
 
 /*
-Controls all player input
+	All potential key inputs
 */
-
 enum Inputs {IDLE, MOVE_LEFT, MOVE_RIGHT, MOVE_DOWN, TURN_LEFT, TURN_RIGHT};
 
 /*

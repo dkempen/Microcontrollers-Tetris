@@ -2,7 +2,7 @@
  * Eeprom.c
  *
  * Created: 20-3-2019 12:56:33
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 
@@ -12,7 +12,12 @@
 
 #include "Eeprom.h"
 
-
+/*
+	Writes a single high score into non-volatile memory
+	
+	@param address - The memory address where the high score will be stored
+	@param score - The value that will be stored in the address
+*/
 void WriteHighScore(uint8_t address, int score) {
 	//To prevent interrupts from disrupting the reading/writing process
 	cli();	
@@ -20,6 +25,11 @@ void WriteHighScore(uint8_t address, int score) {
 	sei();
 }
 
+/*
+	Reads a single high score from non-volatile memory
+	
+	@param address - The memory address where the high score is stored
+*/
 int ReadHighScore(uint8_t address) {
 	//To prevent interrupts from disrupting the reading/writing process
 	cli();

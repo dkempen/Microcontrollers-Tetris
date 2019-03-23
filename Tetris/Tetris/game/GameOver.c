@@ -2,7 +2,7 @@
  * GameOver.c
  *
  * Created: 27-2-2019 14:59:32
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 #define F_CPU 8000000L

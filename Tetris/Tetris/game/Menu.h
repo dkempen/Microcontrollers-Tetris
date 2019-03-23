@@ -2,14 +2,21 @@
  * Menu.h
  *
  * Created: 27-2-2019 15:03:00
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 
 #ifndef MENU_H_
 #define MENU_H_
 
+/*
+	Intializes the menu screen
+*/
 void InitMenu(void);
+
+/*
+	Runs the menu loop
+*/
 void RunMenu(void);
 
 

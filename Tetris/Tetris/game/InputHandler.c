@@ -2,7 +2,7 @@
  * InputHandler.c
  *
  * Created: 27-2-2019 14:59:50
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 #include <stdlib.h>

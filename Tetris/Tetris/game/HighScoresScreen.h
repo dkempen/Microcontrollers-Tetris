@@ -2,15 +2,21 @@
  * HighScoreScreen.h
  *
  * Created: 27-2-2019 15:02:02
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 
 #ifndef HIGHSCORESSCREEN_H_
 #define HIGHSCORESSCREEN_H_
 
+/*
+	Initializes the high score screen
+*/
 void InitHighScoresScreen(void);
 
+/*
+	Runs the loop for the high score screen
+*/
 void RunHighScoresScreen(void);
 
 

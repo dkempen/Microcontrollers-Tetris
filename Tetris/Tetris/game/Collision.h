@@ -2,7 +2,7 @@
  * Collision.h
  *
  * Created: 27-2-2019 15:01:16
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 
@@ -29,7 +29,7 @@ Checks if the player is moving outside of the playing field
 
 	@param player - The player object
 
-	returns 0 if oob
+	returns 0 if out of bounds
 	returns -1 otherwise
 */
 int IsOutOfBounds(Player player);

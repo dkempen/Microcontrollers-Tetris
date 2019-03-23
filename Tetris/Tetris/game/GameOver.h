@@ -2,14 +2,22 @@
  * GameOver.h
  *
  * Created: 27-2-2019 15:01:49
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 
 #ifndef GAMEOVER_H_
 #define GAMEOVER_H_
 
+
+/*
+	Initializes the game over screen
+*/
 void InitGameOver(void);
+
+/*
+	Runs the game over loop
+*/
 void RunGameOver(void);
 
 

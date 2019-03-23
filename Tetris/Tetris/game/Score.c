@@ -2,7 +2,7 @@
  * Score.c
  *
  * Created: 27-2-2019 15:00:33
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 #include "Score.h"

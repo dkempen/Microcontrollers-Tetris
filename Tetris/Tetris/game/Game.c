@@ -2,7 +2,7 @@
  * Game.c
  *
  * Created: 27-2-2019 14:59:23
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 #define F_CPU 8000000L
@@ -85,7 +85,7 @@ void RunGame(void)
 		//AiInput();
 		UpdatePlayer();
 
-		if (millisCounter >= ((1000-(GetRowsRemoved()*10))) + 100)
+		if (millisCounter >= ((900-(GetRowsRemoved()*10))) + 100)
 		{
 			MoveDown();
 			millisCounter = 0;

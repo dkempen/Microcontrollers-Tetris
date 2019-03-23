@@ -2,7 +2,7 @@
  * Player.h
  *
  * Created: 27-2-2019 15:02:37
- *  Author: Aspire V3-772G-747a8
+ *  Author: Ian
  */ 
 
 
@@ -18,15 +18,30 @@ typedef struct {
 
 } Player;
 
+
+/*
+	Initializes the player object
+	
+	@param int - The starting x position
+	@param int - The starting y position
+	@param int - The index of the block
+*/
 void InitPlayer(int,int,int);
+
+/*
+	Updates the player object
+*/
 void UpdatePlayer(void);
 
 /*
-The player block moves down at a constant rate
-No matter the input, this rate of dropping is maintained
+	Moves the player block down 1 row
+	Should be called at a consistent rate
 */
 void MoveDown(void);
 
+/*
+	Returns the player object
+*/
 Player GetPlayer(void);
 
 
