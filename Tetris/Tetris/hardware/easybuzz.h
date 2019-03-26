@@ -9,10 +9,10 @@
 #define EASYBUZZ_H_
 
 // Defines for identifying the song that needs to be played
-#define SONG_MENU 0
-#define SONG_TETRIS	1
-#define EFFECT_CLEAR 2
-#define EFFECT_GAME_OVER 3
+#define SONG_MENU			0
+#define SONG_TETRIS			1
+#define EFFECT_CLEAR		2
+#define EFFECT_GAME_OVER	3
 
 // Struct that holds a note (frequency and length)
 typedef struct
@@ -26,6 +26,5 @@ void easybuzz_update(void);
 void easybuzz_play_loop(int);
 void easybuzz_play_effect(int);
 void easybuzz_stop_loop(void);
-void easybuzz_test(void);
 
 #endif /* EASYBUZZ_H_ */

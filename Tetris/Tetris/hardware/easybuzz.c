@@ -301,12 +301,6 @@ void easybuzz_stop_loop()
 	// Stop the playing sound
 	easybuzz_pwm_off();
 }
-
-void easybuzz_test()
-{
-	easybuzz_init();
-	easybuzz_play_effect(SONG_TETRIS);
-}
 #pragma endregion main_fuctions
 
 #pragma region helper_functions

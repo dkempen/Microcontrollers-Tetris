@@ -5,13 +5,10 @@
  * Author: Daan
  */ 
 
-#define F_CPU 8000000L // TODO: remove together with test function
-
 // Ignore pragma warnings, because Atmel doesn't like code regions for some reason
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 
 #include <avr/io.h>
-#include <util/delay.h>
 
 #include "DotMatrix.h"
 
@@ -142,67 +139,34 @@ void shift_data(int *data)
 	else			// If bit 1 is not set, just shift everything to the right
 		*data /= 2;
 }
-
-// Temporary wait method (TODO: remove with test method)
-void wait(int ms)
-{
-	for (int i=0; i<ms; i++)
-	_delay_ms(1);		// library function (max 30 ms at 8MHz)
-}
-
-// Temporary test method (TODO: remove with wait method)
-void matrix_test()
-{
-	matrix_init();
-	
-	int y = 0;
-	int x = 0;
-	
-	while (1)
-	{
-		matrix_clear();
-		
-		// Loop through all the leds individually
-		int data;
-		for (y = 0; y < 16; y++)
-		{
-			data = 0;
-			for (x = 0; x < 8; x++)
-			{
-				data |= 1 << x;
-				if (y < 8)
-					draw_row(D0_I2C_ADDR, y, data);
-				else
-					draw_row(D1_I2C_ADDR, y - 8, data);
-				wait(50);
-			}
-		}
-	}
-}
 #pragma endregion
 
 #pragma region low_level_fucntions
+// Init TWI interface and set bitrate
 void twi_init(void)
 {
 	TWSR = 0;
-	TWBR = 32;	 // TWI clock set to 100kHz, prescaler = 0
+	TWBR = 32;						// TWI clock set to 100kHz, prescaler = 0
 }
 
+// Generate TWI start condition (page 285 of datasheet)
 void twi_start(void)
 {
-	TWCR = (0x80 | 0x20 | 0x04);
-	while( 0x00 == (TWCR & 0x80) );
+	TWCR = (0x80 | 0x20 | 0x04);	// Set the TWI Control Register in the start condition
+	while( 0x00 == (TWCR & 0x80) ); // Wait until the TWINT flag bit is set, then it is done transmitting
 }
 
+// Generate TWI stop condition
 void twi_stop(void)
 {
-	TWCR = (0x80 | 0x10 | 0x04);
+	TWCR = (0x80 | 0x10 | 0x04);	// Set the TWINT, TWEN and TWSTO bits to 1
 }
 
+// Transmit 8 bits of data
 void twi_tx(unsigned char data)
 {
-	TWDR = data;
-	TWCR = (0x80 | 0x04);
-	while( 0 == (TWCR & 0x80) );
+	TWDR = data;					// Place the data onto the data bus
+	TWCR = (0x80 | 0x04);			// Set the TWINT and TWEN bit to 1
+	while( 0 == (TWCR & 0x80) );	// Wait until the TWINT flag bit is set, then it is done transmitting
 }
 #pragma endregion
