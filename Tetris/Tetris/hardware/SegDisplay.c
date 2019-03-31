@@ -7,6 +7,7 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <stdlib.h>
 
 #include "SegDisplay.h"
 
@@ -35,13 +36,10 @@ void SegDisplay_masterInit()
 	PORT_SPI |= BIT(SPI_SS);
 	// SS_ADC == 1: deselect slave
 	SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR1);
-	// or: SPCR = 0b11010010;
-	// Enable spi, MasterMode, Clock rate fck/64, bitrate=125kHz
-	// Mode = 0: CPOL=0, CPPH=0;
 }
 
 // Write a byte from master to slave
-void spi_write(unsigned char data)
+void SegDisplay_write(unsigned char data)
 {
 	SPDR = data;
 	// Load byte to Data register --> starts transmission
@@ -50,8 +48,7 @@ void spi_write(unsigned char data)
 }
 
 // Write a byte from master to slave and read a byte from slave
-// nice to have; not used here
-char spi_writeRead(unsigned char data)
+char SegDisplay_writeRead(unsigned char data)
 {
 	SPDR = data;
 	// Load byte to Data register --> starts transmission
@@ -64,54 +61,54 @@ char spi_writeRead(unsigned char data)
 }
 
 // Select device on pinnumer PORTB
-void spi_slaveSelect(unsigned char chipNumber)
+void SegDisplay_slaveSelect(unsigned char chipNumber)
 {
 	PORTB &= ~BIT(chipNumber);
 }
 
 // Deselect device on pinnumer PORTB
-void spi_slaveDeSelect(unsigned char chipNumber)
+void SegDisplay_slaveDeSelect(unsigned char chipNumber)
 {
 	PORTB |= BIT(chipNumber);
 }
 
-// Initialize the driver chip (type MAX 7219)
+// Initialize the driver chip 
 void SegDisplay_DriverInit()
 {
-	spi_slaveSelect(0);
-	// Select display chip (MAX7219)
-	spi_write(0x09);
+	SegDisplay_slaveSelect(0);
+	// Select display chip
+	SegDisplay_write(0x09);
 	// Register 09: Decode Mode
-	spi_write(0xFF);
-	// 	-> 1's = BCD mode for all digits
-	spi_slaveDeSelect(0);
+	SegDisplay_write(0xFF);
+	// All digit mode
+	SegDisplay_slaveDeSelect(0);
 	// Deselect display chip
 
-	spi_slaveSelect(0);
+	SegDisplay_slaveSelect(0);
 	// Select dispaly chip
-	spi_write(0x0A);
+	SegDisplay_write(0x0A);
 	// Register 0A: Intensity
-	spi_write(0x01);
-	//  -> Level 4 (in range [1..F])
-	spi_slaveDeSelect(0);
+	SegDisplay_write(0x01);
+	// Sets the intensity
+	SegDisplay_slaveDeSelect(0);
 	// Deselect display chip
 
-	spi_slaveSelect(0);
+	SegDisplay_slaveSelect(0);
 	// Select display chip
-	spi_write(0x0B);
+	SegDisplay_write(0x0B);
 	// Register 0B: Scan-limit
-	spi_write(0x04);
-	// 	-> 1 = Display digits 0..1
-	spi_slaveDeSelect(0);
+	SegDisplay_write(0x04);
+	// Sets all individual displays to on
+	SegDisplay_slaveDeSelect(0);
 	// Deselect display chip
 
-	spi_slaveSelect(0);
+	SegDisplay_slaveSelect(0);
 	// Select display chip
-	spi_write(0x0C);
+	SegDisplay_write(0x0C);
 	// Register 0B: Shutdown register
-	spi_write(0x01);
-	// 	-> 1 = Normal operation
-	spi_slaveDeSelect(0);
+	SegDisplay_write(0x01);
+	//Sets display to Display on
+	SegDisplay_slaveDeSelect(0);
 	// Deselect display chip
 }
 
@@ -119,38 +116,38 @@ void SegDisplay_DriverInit()
 // Set display on ('normal operation')
 void SegDisplay_displayOn()
 {
-	spi_slaveSelect(0);
+	SegDisplay_slaveSelect(0);
 	// Select display chip
-	spi_write(0x0C);
+	SegDisplay_write(0x0C);
 	// Register 0B: Shutdown register
-	spi_write(0x01);
-	// 	-> 1 = Normal operation
-	spi_slaveDeSelect(0);
+	SegDisplay_write(0x01);
+	// Sets the display on
+	SegDisplay_slaveDeSelect(0);
 	// Deselect display chip
 }
 
 // Set display off ('shut down')
 void SegDisplay_displayOff()
 {
-	spi_slaveSelect(0);
+	SegDisplay_slaveSelect(0);
 	// Select display chip
-	spi_write(0x0C);
+	SegDisplay_write(0x0C);
 	// Register 0B: Shutdown register
-	spi_write(0x00);
-	// 	-> 1 = Normal operation
-	spi_slaveDeSelect(0);
+	SegDisplay_write(0x00);
+	// 	Sets the display off
+	SegDisplay_slaveDeSelect(0);
 	// Deselect display chip
 }
 
 void SegDisplay_writeWord (unsigned char adress, unsigned char data)
 {
-	spi_slaveSelect(0);
+	SegDisplay_slaveSelect(0);
 	// Select display chip
-	spi_write(adress);
+	SegDisplay_write(adress);
 	// 	digit adress: (digit place)
-	spi_write(data);
-	// 	digit value: i (= digit place)
-	spi_slaveDeSelect(0);
+	SegDisplay_write(data);
+	//  writes the data on the assigned adress
+	SegDisplay_slaveDeSelect(0);
 	// Deselect display chip
 }
 
